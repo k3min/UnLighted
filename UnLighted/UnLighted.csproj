@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{811D51B6-9A26-4EE6-AD4B-F269CDB85016}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>UnLighted</RootNamespace>
+    <AssemblyName>UnLighted</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\Assets\UnLighted</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Optimize>true</Optimize>
+    <OutputPath>..\Assets\UnLighted</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="UnityEngine">
+      <HintPath>\Applications\Unity\Unity.app\Contents\Frameworks\Managed\UnityEngine.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+    <Folder Include="Managers\" />
+    <Folder Include="ImageEffects\" />
+    <Folder Include="Resources\" />
+    <Folder Include="Resources\Shaders\" />
+    <Folder Include="Resources\Shaders\ImageEffects\" />
+    <Folder Include="Resources\Shaders\Internal\" />
+    <Folder Include="Resources\Shaders\Includes\" />
+    <Folder Include="Resources\Shaders\Surfaces\" />
+    <Folder Include="Resources\Texture\" />
+    <Folder Include="Triggers\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controllers\CameraController.cs" />
+    <Compile Include="Controllers\PlayerController.cs" />
+    <Compile Include="ImageEffects\ImageEffectBase.cs" />
+    <Compile Include="ImageEffects\Lens.cs" />
+    <Compile Include="ImageEffects\Tonemap.cs" />
+    <Compile Include="Managers\ManagerBase.cs" />
+    <Compile Include="Managers\ShaderManager.cs" />
+    <Compile Include="Box.cs" />
+    <Compile Include="Managers\BoxManager.cs" />
+    <Compile Include="Managers\GameManager.cs" />
+    <Compile Include="Triggers\Button.cs" />
+    <Compile Include="Triggers\Trigger.cs" />
+    <Compile Include="Triggers\TriggerBase.cs" />
+    <Compile Include="ImageEffects\BoxProbe.cs" />
+    <Compile Include="ImageEffects\Bloom.cs" />
+    <Compile Include="ImageEffects\HBAO.cs" />
+    <Compile Include="ImageEffects\Cinematic.cs" />
+    <Compile Include="ImageEffects\ColorGrading.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Shaders\ImageEffects\Tonemap.shader">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\Shaders\ImageEffects\Lens.shader">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\Shaders\Includes\Uber.cginc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\Shaders\Includes\Vars.cginc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\Shaders\Includes\ShadowCaster.cginc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\Shaders\Includes\Util.cginc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\Shaders\Surfaces\Uber.shader">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\Shaders\Surfaces\UberGlass.shader">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\Shaders\Internal\PrePassLighting.shader">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\Shaders\ImageEffects\Cinematic.shader">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\Shaders\ImageEffects\HBAO.shader">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\Texture\Random.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\Shaders\ImageEffects\BoxProbe.shader">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\Shaders\ImageEffects\Bloom.shader">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\Shaders\ImageEffects\ColorGrading.shader">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>

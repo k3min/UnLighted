@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnLighted", "UnLighted\UnLighted.csproj", "{811D51B6-9A26-4EE6-AD4B-F269CDB85016}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Editor", "Editor", "{89FCECFB-0FBB-4B34-91A6-CE8D4F9D5414}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnLightedEd", "Editor\UnLightedEd\UnLightedEd.csproj", "{23F727D4-E511-4886-A7F6-877EAF0234E8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{23F727D4-E511-4886-A7F6-877EAF0234E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23F727D4-E511-4886-A7F6-877EAF0234E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23F727D4-E511-4886-A7F6-877EAF0234E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23F727D4-E511-4886-A7F6-877EAF0234E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{811D51B6-9A26-4EE6-AD4B-F269CDB85016}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{811D51B6-9A26-4EE6-AD4B-F269CDB85016}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{811D51B6-9A26-4EE6-AD4B-F269CDB85016}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{811D51B6-9A26-4EE6-AD4B-F269CDB85016}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{23F727D4-E511-4886-A7F6-877EAF0234E8} = {89FCECFB-0FBB-4B34-91A6-CE8D4F9D5414}
+	EndGlobalSection
+EndGlobal
