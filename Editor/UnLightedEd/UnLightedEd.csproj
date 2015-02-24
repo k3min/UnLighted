@@ -50,6 +50,7 @@
     <Compile Include="BoxEditor.cs" />
     <Compile Include="Triggers\TriggerBaseEditor.cs" />
     <Compile Include="Triggers\TriggerEditor.cs" />
+    <Compile Include="PlatformEditor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Box\CubeMapGen.exe">

@@ -66,6 +66,10 @@
     <Compile Include="ImageEffects\HBAO.cs" />
     <Compile Include="ImageEffects\Cinematic.cs" />
     <Compile Include="ImageEffects\ColorGrading.cs" />
+    <Compile Include="ImageEffects\MotionBlur.cs" />
+    <Compile Include="MotionBlurObject.cs" />
+    <Compile Include="Platform.cs" />
+    <Compile Include="Hand.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\ImageEffects\Tonemap.shader">
@@ -111,6 +115,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Resources\Shaders\ImageEffects\ColorGrading.shader">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\Shaders\ImageEffects\MotionBlur.shader">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

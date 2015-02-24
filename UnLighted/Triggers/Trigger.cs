@@ -3,14 +3,12 @@ using System.Collections.Generic;
 
 namespace UnLighted.Triggers
 {
-	[AddComponentMenu("UnLighted/Triggers/Trigger")]
+	[AddComponentMenu("UnLighted/Triggers/Trigger"), RequireComponent(typeof(Collider))]
 	public class Trigger : TriggerBase
 	{
 		public bool Toggle;
-		public AudioClip Audio;
-		private List<Collider> others = new List<Collider>();
 
-		public Vector3 Pos { get; private set; }
+		private List<Collider> others = new List<Collider>();
 
 		public override void Awake()
 		{
@@ -43,8 +41,6 @@ namespace UnLighted.Triggers
 					bounds.Encapsulate(ren.bounds);
 				}
 			}
-
-			this.Pos = bounds.center;
 		}
 
 		public virtual void OnTriggerEnter(Collider other)
@@ -65,11 +61,6 @@ namespace UnLighted.Triggers
 			{
 				t.State = this.Toggle ? !t.State : !t.StartState;
 			}
-
-			if (this.Audio != null)
-			{
-				AudioSource.PlayClipAtPoint(this.Audio, this.Pos);
-			}
 		}
 
 		public virtual void OnTriggerExit(Collider other)
@@ -87,11 +78,6 @@ namespace UnLighted.Triggers
 			foreach (var t in this.Targets)
 			{
 				t.State = t.StartState;
-			}
-
-			if (this.Audio != null)
-			{
-				AudioSource.PlayClipAtPoint(this.Audio, this.Pos);
 			}
 		}
 	}
