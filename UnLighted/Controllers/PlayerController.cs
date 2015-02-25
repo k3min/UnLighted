@@ -8,6 +8,7 @@ namespace UnLighted.Controllers
 		public PlayerMovement Movement = new PlayerMovement
 		{
 			Speed = 3,
+			Sprint = 4,
 			Jump = 5,
 			FeetRadius = 0.2f,
 			Friction = 1,
@@ -27,6 +28,7 @@ namespace UnLighted.Controllers
 		private bool canJump;
 		private bool jump;
 		private bool grounded;
+		private float speed;
 
 		private Vector3 previousPosition;
 		private Vector3 velocity;
@@ -36,8 +38,10 @@ namespace UnLighted.Controllers
 		private void Awake()
 		{
 			this.origin = Camera.main.transform.localPosition;
-			base.rigidbody.freezeRotation = true;
-			base.collider.sharedMaterial = new PhysicMaterial("Player")
+			this.speed = this.Movement.Speed;
+
+			this.rigidbody.freezeRotation = true;
+			this.collider.sharedMaterial = new PhysicMaterial("Player")
 			{
 				dynamicFriction = this.Movement.Friction,
 				staticFriction = this.Movement.Friction,
@@ -47,11 +51,16 @@ namespace UnLighted.Controllers
 
 		private void FixedUpdate()
 		{
-			this.grounded = Physics.CheckSphere(base.rigidbody.position, this.Movement.FeetRadius, 1);
+			this.grounded = Physics.CheckSphere(this.rigidbody.position, this.Movement.FeetRadius, 1);
 
 			if (this.canWalk)
 			{
-				base.rigidbody.MovePosition(base.rigidbody.position + (this.direction * this.Movement.Speed * Time.fixedDeltaTime));
+				var movem = this.Movement;
+				var condi = (movem.Speed > float.Epsilon && Input.GetButton("Sprint"));
+
+				this.speed = Mathf.Lerp(this.speed, condi ? movem.Sprint : movem.Speed, Time.fixedDeltaTime * 2f);
+
+				this.rigidbody.MovePosition(this.rigidbody.position + (this.direction * this.speed * Time.fixedDeltaTime));
 			}
 
 			if (this.jump)
@@ -60,12 +69,12 @@ namespace UnLighted.Controllers
 
 				if (this.canJump)
 				{
-					base.rigidbody.AddForce(Vector3.up * this.Movement.Jump, ForceMode.VelocityChange);
+					this.rigidbody.AddForce(Vector3.up * this.Movement.Jump, ForceMode.VelocityChange);
 				}
 			}
 
-			this.velocity = (base.rigidbody.position - this.previousPosition) / Time.fixedDeltaTime;
-			this.previousPosition = base.rigidbody.position;
+			this.velocity = (this.rigidbody.position - this.previousPosition) / Time.fixedDeltaTime;
+			this.previousPosition = this.rigidbody.position;
 		}
 
 		private void LateUpdate()
@@ -123,7 +132,7 @@ namespace UnLighted.Controllers
 
 			var mag = this.direction.magnitude;
 
-			if (mag > 1)
+			if (mag > 1f)
 			{
 				this.direction /= mag;
 			}
@@ -140,6 +149,7 @@ namespace UnLighted.Controllers
 	public struct PlayerMovement
 	{
 		public float Speed;
+		public float Sprint;
 		public float Jump;
 		public float FeetRadius;
 		public float Friction;
@@ -163,7 +173,7 @@ namespace UnLighted.Controllers
 		{
 			var fll = Mathf.Clamp(vel.y * this.FallScale, -this.FallMax, 0);
 
-			if (Mathf.Abs(vel.y) < 1)
+			if (Mathf.Abs(vel.y) < 1f)
 			{
 				vel.y = 0;
 

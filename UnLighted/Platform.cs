@@ -12,7 +12,6 @@ namespace UnLighted
 	[AddComponentMenu("UnLighted/Platform"), RequireComponent(typeof(Rigidbody))]
 	public class Platform : MonoBehaviour
 	{
-		private const float PI2 = Mathf.PI * 2;
 		private float time;
 		private int dir;
 		private Vector3 a;
@@ -57,7 +56,7 @@ namespace UnLighted
 				this.time = Mathf.Clamp01(this.time);
 			}
 
-			this.T = this.Smooth ? (1 - Mathf.Cos(this.time * Platform.PI2)) * 0.5f : this.time;
+			this.T = this.Smooth ? (1f - Mathf.Cos(this.time * Mathf.PI)) * 0.5f : this.time;
 
 			this.rigidbody.MovePosition(Vector3.Lerp(this.a, this.b, this.T));
 		}

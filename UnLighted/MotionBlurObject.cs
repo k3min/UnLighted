@@ -17,14 +17,14 @@ namespace UnLighted
 			this.mesh = this.GetComponent<MeshFilter>().mesh;
 		}
 
-		private static bool PosChange(Vector3 a, Vector3 b)
+		private static bool Changed(Vector3 cur, Vector3 prv)
 		{
-			return Vector3.SqrMagnitude(a - b) > float.Epsilon;
+			return Vector3.SqrMagnitude(cur - prv) > float.Epsilon;
 		}
 
-		private static bool RotChange(Quaternion a, Quaternion b)
+		private static bool Changed(Quaternion cur, Quaternion prv)
 		{
-			return Quaternion.Angle(a, b) > float.Epsilon;
+			return Quaternion.Angle(cur, prv) > float.Epsilon;
 		}
 
 		public void UpdateTransform(Matrix4x4 vp)
@@ -32,7 +32,7 @@ namespace UnLighted
 			var pos = this.transform.position;
 			var rot = this.transform.rotation;
 
-			this.moved = MotionBlurObject.PosChange(pos, this.prvPos) || MotionBlurObject.RotChange(rot, this.prvRot);
+			this.moved = MotionBlurObject.Changed(pos, this.prvPos) || MotionBlurObject.Changed(rot, this.prvRot);
 
 			if (this.moved)
 			{

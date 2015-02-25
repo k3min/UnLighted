@@ -67,10 +67,7 @@ namespace UnLighted.ImageEffects
 			this.VP = proj * view;
 			this.invVP = this.VP.inverse;
 
-			foreach (var o in this.objects)
-			{
-				o.UpdateTransform(this.VP);
-			}
+			this.objects.ForEach(o => o.UpdateTransform(this.VP));
 		}
 
 		private void OnPostRender()
@@ -83,10 +80,7 @@ namespace UnLighted.ImageEffects
 
 			Graphics.SetRenderTarget(this.motion);
 
-			foreach (var o in this.objects)
-			{
-				o.RenderVectors(this.Material);
-			}
+			this.objects.ForEach(o => o.RenderVectors(this.Material));
 
 			Graphics.SetRenderTarget(rt);
 		}

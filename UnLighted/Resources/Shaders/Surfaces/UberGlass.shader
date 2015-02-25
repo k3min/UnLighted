@@ -19,6 +19,7 @@
 		}
 
 		Cull Off
+		ZWrite Off
 
 		CGINCLUDE
 

@@ -32,9 +32,11 @@ namespace UnLightedEd
 			EditorGUILayout.PropertyField(this.speedP);
 			EditorGUILayout.PropertyField(this.motionP);
 
-			this.smoothP.boolValue = GUILayout.Toggle(this.smoothP.boolValue, "Use Sin", EditorStyles.miniButton);
+			this.smoothP.boolValue = GUILayout.Toggle(this.smoothP.boolValue, "Smooth", EditorStyles.miniButton);
 			this.collisionP.boolValue = GUILayout.Toggle(this.collisionP.boolValue, "Collision", EditorStyles.miniButton);
 			this.normalizeP.boolValue = GUILayout.Toggle(this.normalizeP.boolValue, "Normalize", EditorStyles.miniButton);
+
+			Util.Hint<Platform>(this.target, x => !x.rigidbody.isKinematic, "You may want to make the rigidbody kinematic", MessageType.Info);
 
 			this.serializedObject.ApplyModifiedProperties();
 		}

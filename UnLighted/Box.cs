@@ -7,8 +7,8 @@ namespace UnLighted
 	{
 		public Cubemap Cubemap;
 
-		public Vector3 Size { get { return base.collider.bounds.size; } }
+		public Vector3 Size { get { return this.collider.bounds.size; } }
 
-		public Vector3 Pos { get { return base.transform.position; } }
+		public Vector3 Pos { get { return this.transform.position; } }
 	}
 }

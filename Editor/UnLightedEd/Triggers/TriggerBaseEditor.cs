@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Linq;
 using UnLighted.Triggers;
+using UnLightedEd;
 
 [CustomEditor(typeof(TriggerBase), true)]
 public class TriggerBaseEditor : Editor
@@ -54,7 +55,9 @@ public class TriggerBaseEditor : Editor
 
 			EditorGUILayout.BeginHorizontal();
 			{
-				stateP.boolValue = GUILayout.Toggle(stateP.boolValue, stateP.boolValue ? "On" : "Off", EditorStyles.miniButtonLeft);
+				var state = stateP.boolValue ? "On" : "Off";
+
+				stateP.boolValue = GUILayout.Toggle(stateP.boolValue, state, EditorStyles.miniButtonLeft);
 
 				if (GUILayout.Button("Delete", EditorStyles.miniButtonRight))
 				{
@@ -71,12 +74,7 @@ public class TriggerBaseEditor : Editor
 			this.targetsP.InsertArrayElementAtIndex(this.targetsP.arraySize);
 		}
 
-		var trigger = this.target as TriggerBase;
-
-		if (trigger.collider != null && !trigger.collider.isTrigger)
-		{
-			EditorGUILayout.HelpBox("Collider isn't a trigger!", MessageType.Warning);
-		}
+		Util.Hint<TriggerBase>(this.target, x => x.collider != null && !x.collider.isTrigger, "Collider isn't a trigger!", MessageType.Warning);
 
 		this.serializedObject.ApplyModifiedProperties();
 	}
@@ -92,10 +90,12 @@ public class TriggerBaseEditor : Editor
 
 		foreach (var triggerTarget in trigger.Targets)
 		{
-			if (triggerTarget.GameObject != null)
+			if (triggerTarget.GameObject == null)
 			{
-				Handles.DrawLine(trigger.transform.position, triggerTarget.GameObject.transform.position);
+				continue;
 			}
+
+			Handles.DrawLine(trigger.transform.position, triggerTarget.GameObject.transform.position);
 		}
 	}
 }

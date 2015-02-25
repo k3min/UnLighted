@@ -19,10 +19,7 @@ namespace UnLightedEd
 				EditorGUILayout.HelpBox("GameObject isn't in the \"Box\" layer!", MessageType.Warning);
 			}
 
-			if (!box.collider.isTrigger)
-			{
-				EditorGUILayout.HelpBox("Collider isn't a trigger!", MessageType.Warning);
-			}
+			Util.Hint<Box>(this.target, x => !x.collider.isTrigger, "Collider isn't a trigger!", MessageType.Warning);
 
 			GUI.enabled = EditorApplication.isPlaying;
 
