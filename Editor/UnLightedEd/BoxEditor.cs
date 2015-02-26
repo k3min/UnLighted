@@ -10,22 +10,16 @@ namespace UnLightedEd
 	{
 		public override void OnInspectorGUI()
 		{
-			var box = base.target as Box;
-
 			base.OnInspectorGUI();
 
-			if (LayerMask.LayerToName(box.gameObject.layer) != "Box")
-			{
-				EditorGUILayout.HelpBox("GameObject isn't in the \"Box\" layer!", MessageType.Warning);
-			}
-
-			Util.Hint<Box>(this.target, x => !x.collider.isTrigger, "Collider isn't a trigger!", MessageType.Warning);
+			this.target.Hint<Box>(x => LayerMask.LayerToName(x.gameObject.layer) == "Box", "GameObject isn't in the \"Box\" layer!");
+			this.target.Hint<Box>(x => x.collider.isTrigger, "Collider isn't a trigger!");
 
 			GUI.enabled = EditorApplication.isPlaying;
 
 			if (GUILayout.Button("Render"))
 			{
-				BoxProbe.Render(box);
+				BoxProbe.Render(this.target as Box);
 			}
 
 			GUI.enabled = true;

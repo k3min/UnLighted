@@ -2,26 +2,29 @@
 using UnityEngine;
 using UnLighted.Triggers;
 
-[CustomEditor(typeof(Trigger), true)]
-public class TriggerEditor : TriggerBaseEditor
+namespace UnLightedEd.Triggers
 {
-	private SerializedProperty toggleP;
-
-	public override void OnEnable()
+	[CustomEditor(typeof(Trigger), true)]
+	internal class TriggerEditor : TriggerBaseEditor
 	{
-		base.OnEnable();
+		private SerializedProperty toggleP;
 
-		this.toggleP = this.serializedObject.FindProperty("Toggle");
-	}
+		public override void OnEnable()
+		{
+			base.OnEnable();
 
-	public override void OnInspectorGUI()
-	{
-		this.serializedObject.Update();
+			this.toggleP = this.serializedObject.FindProperty("Toggle");
+		}
 
-		this.toggleP.boolValue = GUILayout.Toggle(this.toggleP.boolValue, "Toggle", EditorStyles.miniButton);
+		public override void OnInspectorGUI()
+		{
+			this.serializedObject.Update();
 
-		this.serializedObject.ApplyModifiedProperties();
+			this.toggleP.boolValue = GUILayout.Toggle(this.toggleP.boolValue, "Toggle", EditorStyles.miniButton);
 
-		base.OnInspectorGUI();
+			this.serializedObject.ApplyModifiedProperties();
+
+			base.OnInspectorGUI();
+		}
 	}
 }

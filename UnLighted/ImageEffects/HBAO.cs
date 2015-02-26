@@ -20,8 +20,8 @@ namespace UnLighted.ImageEffects
 
 		public override void OnRenderImage(RenderTexture a, RenderTexture b)
 		{
-			var width = a.width >> this.Downsample;
-			var height = a.height >> this.Downsample;
+			var width = a.width >> ImageEffectBase.Level(this.Downsample);
+			var height = a.height >> ImageEffectBase.Level(this.Downsample);
 
 			var p = this.camera.projectionMatrix;
 			var projInfo = new Vector4(

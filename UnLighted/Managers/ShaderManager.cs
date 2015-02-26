@@ -2,7 +2,7 @@
 
 namespace UnLighted.Managers
 {
-	[AddComponentMenu("UnLighted/Managers/Shader")]
+	[AddComponentMenu("UnLighted/Managers/Shader Manager")]
 	public class ShaderManager : ManagerBase<ShaderManager>
 	{
 		public ShaderProperty[] Properties =

@@ -2,7 +2,7 @@
 
 namespace UnLighted.Managers
 {
-	[AddComponentMenu("UnLighted/Managers/Box")]
+	[AddComponentMenu("UnLighted/Managers/Box Manager")]
 	public class BoxManager : ManagerBase<BoxManager>
 	{
 		public Box Current { get; private set; }

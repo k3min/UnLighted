@@ -28,10 +28,7 @@ namespace UnLightedEd.Materials
 
 			mat.shaderKeywords = kys.ToArray();
 
-			if (GUI.changed)
-			{
-				EditorUtility.SetDirty(mat);
-			}
+			mat.Save();
 		}
 	}
 }

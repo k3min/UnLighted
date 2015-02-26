@@ -1,12 +1,11 @@
 ﻿using UnityEngine;
+using UnLighted.Controllers;
 
 namespace UnLighted
 {
 	[AddComponentMenu("UnLighted/Hand")]
 	public class Hand : MonoBehaviour
 	{
-		private const int solverCont = 30;
-
 		public float MaxDistance = 2;
 		public float Break = 1000;
 
@@ -57,12 +56,12 @@ namespace UnLighted
 				this.joint.hideFlags = HideFlags.HideInInspector;
 
 				this.rigidbody.isKinematic = true;
-				this.rigidbody.solverIterationCount = Hand.solverCont;
+				this.rigidbody.solverIterationCount = PlayerController.SolverCount;
 				this.rigidbody.hideFlags = HideFlags.HideInInspector;
 			}
 
 			this.joint.connectedBody = hit.rigidbody;
-			this.joint.connectedBody.solverIterationCount = Hand.solverCont;
+			this.joint.connectedBody.solverIterationCount = PlayerController.SolverCount;
 		}
 	}
 }

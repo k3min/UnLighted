@@ -5,7 +5,7 @@ using UnLighted;
 namespace UnLightedEd
 {
 	[CustomEditor(typeof(Hand))]
-	public class HandEditor : Editor
+	internal class HandEditor : Editor
 	{
 		public override void OnInspectorGUI()
 		{

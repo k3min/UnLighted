@@ -2,17 +2,17 @@
 
 namespace UnLighted.Controllers
 {
-	[AddComponentMenu("UnLighted/Controllers/Player"), RequireComponent(typeof(CapsuleCollider), typeof(Rigidbody))]
+	[AddComponentMenu("UnLighted/Controllers/Player Controller"), RequireComponent(typeof(CapsuleCollider), typeof(Rigidbody))]
 	public class PlayerController : MonoBehaviour
 	{
+		public const int SolverCount = 64;
+
 		public PlayerMovement Movement = new PlayerMovement
 		{
 			Speed = 3,
 			Sprint = 4,
 			Jump = 5,
-			FeetRadius = 0.2f,
-			Friction = 1,
-			FrictionCombine = PhysicMaterialCombine.Maximum
+			FeetRadius = 0.2f
 		};
 
 		public PlayerHeadBob HeadBob = new PlayerHeadBob
@@ -41,12 +41,7 @@ namespace UnLighted.Controllers
 			this.speed = this.Movement.Speed;
 
 			this.rigidbody.freezeRotation = true;
-			this.collider.sharedMaterial = new PhysicMaterial("Player")
-			{
-				dynamicFriction = this.Movement.Friction,
-				staticFriction = this.Movement.Friction,
-				frictionCombine = this.Movement.FrictionCombine
-			};
+			this.rigidbody.solverIterationCount = PlayerController.SolverCount;
 		}
 
 		private void FixedUpdate()
@@ -152,8 +147,6 @@ namespace UnLighted.Controllers
 		public float Sprint;
 		public float Jump;
 		public float FeetRadius;
-		public float Friction;
-		public PhysicMaterialCombine FrictionCombine;
 	}
 
 	[System.Serializable]

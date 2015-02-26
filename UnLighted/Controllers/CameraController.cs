@@ -2,7 +2,7 @@
 
 namespace UnLighted.Controllers
 {
-	[AddComponentMenu("UnLighted/Controllers/Camera"), RequireComponent(typeof(Camera))]
+	[AddComponentMenu("UnLighted/Controllers/Camera Controller"), RequireComponent(typeof(Camera))]
 	public class CameraController : MonoBehaviour
 	{
 		public float Sensitivity = 5;

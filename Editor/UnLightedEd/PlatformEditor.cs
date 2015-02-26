@@ -5,7 +5,7 @@ using UnLighted;
 namespace UnLightedEd
 {
 	[CustomEditor(typeof(Platform))]
-	public class PlatformEditor : Editor
+	internal class PlatformEditor : Editor
 	{
 		private SerializedProperty toP;
 		private SerializedProperty speedP;
@@ -36,7 +36,7 @@ namespace UnLightedEd
 			this.collisionP.boolValue = GUILayout.Toggle(this.collisionP.boolValue, "Collision", EditorStyles.miniButton);
 			this.normalizeP.boolValue = GUILayout.Toggle(this.normalizeP.boolValue, "Normalize", EditorStyles.miniButton);
 
-			Util.Hint<Platform>(this.target, x => !x.rigidbody.isKinematic, "You may want to make the rigidbody kinematic", MessageType.Info);
+			this.target.Hint<Platform>(x => x.rigidbody.isKinematic, "You may want to make the rigidbody kinematic", MessageType.Info);
 
 			this.serializedObject.ApplyModifiedProperties();
 		}
@@ -58,10 +58,7 @@ namespace UnLightedEd
 			platform.To.y = Mathf.Round(platform.To.y * 100) * 0.01f;
 			platform.To.z = Mathf.Round(platform.To.z * 100) * 0.01f;
 
-			if (GUI.changed)
-			{
-				EditorUtility.SetDirty(this.target);
-			}
+			platform.Save();
 		}
 	}
 }

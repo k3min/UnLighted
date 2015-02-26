@@ -36,9 +36,7 @@
 				float4 pos = float4((i.uv * 2.0) - 1.0, d, 1.0);
 				float4 prv = mul(_Proj, pos);
 
-				float2 mot = MotionVector(pos, prv);
-
-				return float4(mot, 0.0, 0.0);
+				return float4(MotionVector(pos, prv), 0.0, 0.0);
 			}
 
 			ENDCG
@@ -64,7 +62,7 @@
 
 				vel *= _MotionScale;
 
-				int magnitude = length(vel * _MotionTex_TexelSize.zw);
+				int magnitude = round(length(vel * _MotionTex_TexelSize.zw));
 				int samples = clamp(magnitude, 1, _MaxSamples);
 
 				float4 res = tex2D(_MainTex, i.uv);
@@ -122,11 +120,7 @@
 				float3 uv = i.screen.xyz / i.screen.w;
 
 				float d = tex2D(_CameraDepthTexture, uv.xy).x;
-				float z = uv.z;
-
-			#if SHADER_API_OPENGL
-				z = (z * 0.5) + 0.5;
-			#endif
+				float z = (uv.z * 0.5) + 0.5;
 
 				if (d < (z - EPSILON))
 				{

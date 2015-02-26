@@ -20,8 +20,8 @@ namespace UnLighted.ImageEffects
 
 		public override void OnRenderImage(RenderTexture a, RenderTexture b)
 		{
-			var w = a.width >> this.Downsample;
-			var h = a.height >> this.Downsample;
+			var w = a.width >> ImageEffectBase.Level(this.Downsample);
+			var h = a.height >> ImageEffectBase.Level(this.Downsample);
 
 			var rt = RenderTexture.GetTemporary(w, h, 0, RenderTextureFormat.ARGBHalf);
 

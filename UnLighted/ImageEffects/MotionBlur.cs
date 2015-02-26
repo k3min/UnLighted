@@ -14,9 +14,7 @@ namespace UnLighted.ImageEffects
 		public float TargetFPS = 60;
 		public int MaxSamples = 32;
 		public int Downsample = 1;
-
-		private int width;
-		private int height;
+		public bool Debug;
 
 		private RenderTexture motion;
 
@@ -42,10 +40,10 @@ namespace UnLighted.ImageEffects
 		{
 			base.Awake();
 
-			this.width = Screen.width >> this.Downsample;
-			this.height = Screen.height >> this.Downsample;
+			var w = Screen.width >> ImageEffectBase.Level(this.Downsample);
+			var h = Screen.height >> ImageEffectBase.Level(this.Downsample);
 
-			this.motion = new RenderTexture(this.width, this.height, 0, RenderTextureFormat.ARGBHalf);
+			this.motion = new RenderTexture(w, h, 0, RenderTextureFormat.ARGBHalf);
 
 			foreach (var mr in Object.FindObjectsOfType<MeshRenderer>())
 			{
@@ -92,6 +90,16 @@ namespace UnLighted.ImageEffects
 			this.Material.SetInt("_MaxSamples", this.MaxSamples);
 
 			Graphics.Blit(a, b, this.Material, 1);
+		}
+
+		private void OnGUI()
+		{
+			if (!this.Debug)
+			{
+				return;
+			}
+
+			GUI.DrawTexture(new Rect(0, 0, this.motion.width, this.motion.height), this.motion, ScaleMode.ScaleAndCrop, false);
 		}
 	}
 }

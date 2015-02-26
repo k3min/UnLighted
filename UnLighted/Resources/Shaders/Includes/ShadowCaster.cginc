@@ -15,5 +15,5 @@ v2f_shadow vert_shadow(appdata_full v)
 
 float4 frag_shadow(v2f_shadow i) : COLOR
 {
-	return EncodeFloatRGBA(min(length(i.vec) * _LightPositionRange.w, 0.999));
+	return EncodeFloatRGBA(min(length(i.vec) * _LightPositionRange.w, 1.0 - EPSILON));
 }

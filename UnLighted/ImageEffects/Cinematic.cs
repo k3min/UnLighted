@@ -57,8 +57,8 @@ namespace UnLighted.ImageEffects
 
 		public override void OnRenderImage(RenderTexture a, RenderTexture b)
 		{
-			var width = a.width >> this.Bloom.Downsample;
-			var height = a.height >> this.Bloom.Downsample;
+			var width = a.width >> ImageEffectBase.Level(this.Bloom.Downsample);
+			var height = a.height >> ImageEffectBase.Level(this.Bloom.Downsample);
 			var aspect = (1f * a.width) / (1f * a.height);
 
 			var quarterRezColor = RenderTexture.GetTemporary(width, height, 0, Cinematic.format);
