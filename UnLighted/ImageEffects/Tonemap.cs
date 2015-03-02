@@ -5,13 +5,13 @@ namespace UnLighted.ImageEffects
 	[AddComponentMenu("UnLighted/Image Effects/Tonemap")]
 	public class Tonemap : ImageEffectBase
 	{
+		private bool first = true;
+		private RenderTexture lum;
+
 		public int MipLevel = 8;
 		public float AdaptionRate = 2.5f;
 		public float Exposure = 1;
 		public bool Debug;
-
-		private bool first = true;
-		private RenderTexture lum;
 
 		public override string Name
 		{

@@ -2,11 +2,11 @@
 
 namespace UnLighted
 {
-	public enum Motion
+	public enum PlatformMotion
 	{
 		Default,
 		A2B,
-		Back
+		AutoBack
 	}
 
 	[AddComponentMenu("UnLighted/Platform"), RequireComponent(typeof(Rigidbody))]
@@ -16,12 +16,13 @@ namespace UnLighted
 		private int dir;
 		private Vector3 a;
 		private Vector3 b;
+
 		public Vector3 To;
 		public bool Smooth;
-		public Motion Motion;
+		public PlatformMotion Motion;
 		public float Speed = 1;
-		public bool Collision;
 		public bool Normalize = true;
+		public string Tag = "Untagged";
 
 		public float T { get; private set; }
 
@@ -37,17 +38,17 @@ namespace UnLighted
 
 			if (this.Normalize)
 			{
-				motion *= 1f / Vector3.Distance(this.a, this.b);
+				motion /= Vector3.Distance(this.a, this.b);
 			}
 
-			if (this.Motion != Motion.Default)
+			if (this.Motion != PlatformMotion.Default)
 			{
 				motion *= this.dir;
 			}
 
 			this.time += motion * Time.fixedDeltaTime;
 
-			if (this.Motion == Motion.Default)
+			if (this.Motion == PlatformMotion.Default)
 			{
 				this.time %= 1;
 			}
@@ -63,17 +64,17 @@ namespace UnLighted
 
 		private void OnCollisionEnter(Collision other)
 		{
-			if (!this.Collision || this.Motion != Motion.Default || other.gameObject.tag != "Player")
+			if (this.Motion == PlatformMotion.Default || this.Tag != other.gameObject.tag)
 			{
 				return;
 			}
 
-			if (Mathf.Abs(this.time) < Mathf.Epsilon)
+			if (this.time <= float.Epsilon)
 			{
 				this.OnTrigger(true);
 			}
 
-			if (Mathf.Abs(this.time - 1) < Mathf.Epsilon)
+			if (this.time >= (1f - float.Epsilon))
 			{
 				this.OnTrigger(false);
 			}
@@ -86,14 +87,15 @@ namespace UnLighted
 
 		private void OnCollisionExit(Collision other)
 		{
-			if (this.Collision &&
-			    this.Motion == Motion.Back &&
-			    other.gameObject.tag == "Player" &&
-			    Mathf.Abs(this.time) > Mathf.Epsilon &&
-			    Mathf.Abs(this.time - 1) > Mathf.Epsilon)
+			if (this.Motion != PlatformMotion.AutoBack ||
+			    this.Tag != other.gameObject.tag ||
+			    this.time <= float.Epsilon ||
+			    this.time >= (1f - float.Epsilon))
 			{
-				this.dir *= -1;
+				return;
 			}
+
+			this.dir *= -1;
 		}
 	}
 }

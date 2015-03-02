@@ -16,6 +16,7 @@
 		{
 			"Queue" = "Transparent"
 			"RenderType" = "Transparent"
+			"IgnoreProjector" = "True"
 		}
 
 		Cull Off

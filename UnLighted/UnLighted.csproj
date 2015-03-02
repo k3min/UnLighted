@@ -84,9 +84,6 @@
     <None Include="Resources\Shaders\Includes\Vars.cginc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Resources\Shaders\Includes\ShadowCaster.cginc">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="Resources\Shaders\Includes\Util.cginc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

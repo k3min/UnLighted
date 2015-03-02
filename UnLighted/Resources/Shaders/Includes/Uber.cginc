@@ -1,4 +1,7 @@
-﻿v2f_light vert_light(appdata_full v)
+﻿#ifndef UBER_INCLUDED
+#define UBER_INCLUDED
+
+v2f_light vert_light(appdata_full v)
 {
 	v2f_light o;
 
@@ -39,7 +42,7 @@ v2f_uber vert_uber(appdata_full v)
 
 #ifndef UNITY_PASS_FORWARDBASE
 #ifndef LIGHTMAP_OFF
-	o.uv.zw = v.texcoord1 * unity_LightmapST.xy;
+	o.uv.zw = v.texcoord1.xy * unity_LightmapST.xy;
 	o.uv.zw += unity_LightmapST.zw;
 
 	float4 fade = unity_ShadowFadeCenterAndType;
@@ -57,6 +60,17 @@ v2f_uber vert_uber(appdata_full v)
 #else
 	o.multi.xyz = mul(rotation, ObjSpaceLightDir(v.vertex));
 #endif
+
+	return o;
+}
+
+v2f_shadow vert_shadow(appdata_full v)
+{
+	v2f_shadow o;
+
+	o.pos = mul(UNITY_MATRIX_MVP, v.vertex);
+	o.uv = v.texcoord.xy;
+	o.vec = mul(_Object2World, v.vertex).xyz - _LightPositionRange.xyz;
 
 	return o;
 }
@@ -182,3 +196,5 @@ float SampleShadowCube(float3 vec)
 	return DecodeFloatRGBA(texCUBE(_ShadowMapTexture, vec)) < fade ? _LightShadowData.r : 1.0;
 #endif
 }
+
+#endif

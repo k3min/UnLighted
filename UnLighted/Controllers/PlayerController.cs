@@ -48,6 +48,11 @@ namespace UnLighted.Controllers
 		{
 			this.grounded = Physics.CheckSphere(this.rigidbody.position, this.Movement.FeetRadius, 1);
 
+			if (this.Movement.SpaghettiLegs)
+			{
+				this.rigidbody.freezeRotation = this.canJump;
+			}
+
 			if (this.canWalk)
 			{
 				var movem = this.Movement;
@@ -147,6 +152,7 @@ namespace UnLighted.Controllers
 		public float Sprint;
 		public float Jump;
 		public float FeetRadius;
+		public bool SpaghettiLegs;
 	}
 
 	[System.Serializable]

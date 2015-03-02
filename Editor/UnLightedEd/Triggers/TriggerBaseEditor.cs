@@ -18,6 +18,8 @@ namespace UnLightedEd.Triggers
 
 		public override void OnInspectorGUI()
 		{
+			base.OnInspectorGUI();
+
 			this.serializedObject.Update();
 
 			EditorGUILayout.LabelField("Targets");

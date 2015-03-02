@@ -13,7 +13,6 @@ namespace UnLightedEd
 			base.OnInspectorGUI();
 
 			this.target.Hint<Box>(x => LayerMask.LayerToName(x.gameObject.layer) == "Box", "GameObject isn't in the \"Box\" layer!");
-			this.target.Hint<Box>(x => x.collider.isTrigger, "Collider isn't a trigger!");
 
 			GUI.enabled = EditorApplication.isPlaying;
 

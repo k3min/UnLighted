@@ -40,19 +40,18 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Managers\" />
-    <Folder Include="Materials\" />
     <Folder Include="Triggers\" />
     <Folder Include="Box\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Managers\ShaderManagerEditor.cs" />
-    <Compile Include="Materials\UberMaterialEditor.cs" />
     <Compile Include="BoxEditor.cs" />
     <Compile Include="Triggers\TriggerBaseEditor.cs" />
     <Compile Include="Triggers\TriggerEditor.cs" />
     <Compile Include="PlatformEditor.cs" />
     <Compile Include="HandEditor.cs" />
     <Compile Include="Util.cs" />
+    <Compile Include="UberMaterialEditor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Box\CubeMapGen.exe">

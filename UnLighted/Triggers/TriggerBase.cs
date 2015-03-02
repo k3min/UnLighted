@@ -11,6 +11,7 @@ namespace UnLighted.Triggers
 	[AddComponentMenu("")]
 	public abstract class TriggerBase : MonoBehaviour
 	{
+		[HideInInspector]
 		public TriggerTarget[] Targets;
 
 		public virtual void Awake()
@@ -31,6 +32,7 @@ namespace UnLighted.Triggers
 	{
 		[SerializeField]
 		private bool state;
+
 		public GameObject GameObject;
 		public Behaviour Behaviour;
 		public TriggerAction Action;

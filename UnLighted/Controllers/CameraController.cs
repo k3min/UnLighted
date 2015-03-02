@@ -5,13 +5,13 @@ namespace UnLighted.Controllers
 	[AddComponentMenu("UnLighted/Controllers/Camera Controller"), RequireComponent(typeof(Camera))]
 	public class CameraController : MonoBehaviour
 	{
-		public float Sensitivity = 5;
-		public float Smoothing = 0.04f;
-		public float Tilt = -0.005f;
-
 		private Vector2 input;
 		private Vector2 rotation;
 		private Vector3 rotationV;
+
+		public float Sensitivity = 5;
+		public float Smoothing = 0.04f;
+		public float Tilt = -0.005f;
 
 		private void Update()
 		{

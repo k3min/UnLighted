@@ -13,10 +13,13 @@ namespace UnLightedEd
 
 			var trigger = this.target as Hand;
 
-			if (trigger.ConnectedBody != null)
+			if (trigger.Holding != null)
 			{
-				EditorGUILayout.Separator();
-				EditorGUILayout.ObjectField("Holding", trigger.ConnectedBody, typeof(Rigidbody), false);
+				GUI.enabled = false;
+
+				EditorGUILayout.ObjectField("Holding", trigger.Holding, typeof(Rigidbody), false);
+
+				GUI.enabled = true;
 			}
 		}
 	}

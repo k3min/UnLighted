@@ -1,4 +1,7 @@
-﻿static const float PI = 3.14159265358979323846;
+﻿#ifndef VARS_INCLUDED
+#define VARS_INCLUDED
+
+static const float PI = 3.14159265358979323846;
 static const float TWO_PI = PI * 2.0;
 static const float HALF_PI = PI * 0.5;
 static const float EPSILON = 0.001;
@@ -47,3 +50,11 @@ struct v2f_uber {
 	float3 worldPos : TEXCOORD6;
 	float4 multi : TEXCOORD7;
 };
+
+struct v2f_shadow {
+	float4 pos : POSITION;
+	float2 uv : TEXCOORD0;
+	float3 vec : TEXCOORD1;
+};
+
+#endif

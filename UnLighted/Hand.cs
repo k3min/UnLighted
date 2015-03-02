@@ -6,16 +6,26 @@ namespace UnLighted
 	[AddComponentMenu("UnLighted/Hand")]
 	public class Hand : MonoBehaviour
 	{
+		private Joint joint;
+
 		public float MaxDistance = 2;
 		public float Break = 1000;
 
-		private Joint joint;
-
-		public Rigidbody ConnectedBody
+		public Rigidbody Holding
 		{
 			get
 			{
 				return this.joint != null ? this.joint.connectedBody : null;
+			}
+
+			set
+			{
+				if (this.joint == null)
+				{
+					return;
+				}
+
+				this.joint.connectedBody = value;
 			}
 		}
 
@@ -26,18 +36,18 @@ namespace UnLighted
 				return;
 			}
 
-			if (this.joint != null && this.joint.connectedBody != null)
+			if (this.Holding != null)
 			{
-				this.joint.connectedBody.solverIterationCount = Physics.solverIterationCount;
-				this.joint.connectedBody = null;
+				this.Holding.solverIterationCount = Physics.solverIterationCount;
+				this.Holding = null;
 
 				return;
 			}
 
-			RaycastHit hit;
-
 			var origin = Camera.main.transform.position;
 			var direction = Camera.main.transform.forward;
+
+			RaycastHit hit;
 
 			if (!Physics.Raycast(origin, direction, out hit, this.MaxDistance))
 			{
@@ -60,8 +70,8 @@ namespace UnLighted
 				this.rigidbody.hideFlags = HideFlags.HideInInspector;
 			}
 
-			this.joint.connectedBody = hit.rigidbody;
-			this.joint.connectedBody.solverIterationCount = PlayerController.SolverCount;
+			this.Holding = hit.rigidbody;
+			this.Holding.solverIterationCount = PlayerController.SolverCount;
 		}
 	}
 }

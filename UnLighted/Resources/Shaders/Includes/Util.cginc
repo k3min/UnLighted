@@ -1,6 +1,9 @@
-﻿float4 HDREncode(float3 col)
+﻿#ifndef UTIL_INCLUDED
+#define UTIL_INCLUDED
+
+float4 HDREncode(float3 col)
 {
-	return float4(col, 1) / max(max(1.0, col.r), max(col.g, col.b));
+	return float4(col, 1.0) / max(max(1.0, col.r), max(col.g, col.b));
 }
 
 float3 HDRDecode(float4 col)
@@ -48,5 +51,7 @@ float2 MotionVector(float4 cur, float4 prv)
 	float2 a = cur.xy / cur.w;
 	float2 b = prv.xy / prv.w;
 
-	return ((a - b) * 0.5) + 0.5;
+	return saturate(((a - b) * 0.5) + 0.5);
 }
+
+#endif

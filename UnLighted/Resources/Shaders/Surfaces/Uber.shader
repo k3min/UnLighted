@@ -10,7 +10,8 @@
 		_Roughness("Roughness", 2D) = "white" {}
 		_AO("AO", 2D) = "white" {}
 		_Height("Height", 2D) = "white" {}
-		_Params("Metallic, Roughness, Bumpiness", Vector) = (1, 1, 1, 1)
+		_Cut("Cut", 2D) = "white" {}
+		_Params("Metallic, Roughness, Bumpiness, Cut", Vector) = (1, 1, 1, 1)
 		[HideInInspector]
 		_Hack("", 2D) = "bump" {}
 	}
@@ -35,6 +36,7 @@
 		#pragma multi_compile METALLIC_OFF METALLIC_ON
 		#pragma multi_compile ROUGHNESS_OFF ROUGHNESS_ON
 		#pragma multi_compile HEIGHT_OFF HEIGHT_ON
+		#pragma multi_compile CUT_OFF CUT_ON
 
 		float3 _Color;
 		float3 _Alt;
@@ -45,6 +47,7 @@
 		sampler2D _AO;
 		sampler2D _Height;
 		sampler2D _Hack;
+		sampler2D _Cut;
 
 		ENDCG
 
@@ -76,6 +79,10 @@
 
 			float4 frag(v2f_light i) : COLOR
 			{
+			#ifdef CUT_ON
+				clip(tex2D(_Cut, i.uv).r - _Params.w);
+			#endif
+
 				float4 params = saturate(_Params);
 
 			#ifdef HEIGHT_ON
@@ -138,6 +145,10 @@
 
 			float4 frag(v2f_uber i) : COLOR
 			{
+			#ifdef CUT_ON
+				clip(tex2D(_Cut, i.uv).r - _Params.w);
+			#endif
+
 				float4 light = Lighting(i);
 				float4 params = saturate(_Params);
 
@@ -208,16 +219,25 @@
 
 		Pass
 		{
+			Name "SHADOWCASTER"
+
 			Tags { "LightMode" = "ShadowCaster" }
 
 			Cull Off
 
 			CGPROGRAM
 
-			#include "./../Includes/ShadowCaster.cginc"
-
 			#pragma vertex vert_shadow
-			#pragma fragment frag_shadow
+			#pragma fragment frag
+
+			float4 frag(v2f_shadow i) : COLOR
+			{
+			#ifdef CUT_ON
+				clip(tex2D(_Cut, i.uv).r - _Params.w);
+			#endif
+
+				return EncodeFloatRGBA(min(length(i.vec) * _LightPositionRange.w, 1.0 - EPSILON));
+			}
 
 			ENDCG
 		}

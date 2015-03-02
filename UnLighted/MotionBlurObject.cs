@@ -17,14 +17,28 @@ namespace UnLighted
 			this.mesh = this.GetComponent<MeshFilter>().mesh;
 		}
 
-		private static bool Changed(Vector3 cur, Vector3 prv)
+		private bool Changed(Vector3 pos)
 		{
-			return Vector3.SqrMagnitude(cur - prv) > float.Epsilon;
+			var changed = Vector3.Distance(this.prvPos, pos) > float.Epsilon;
+
+			if (changed)
+			{
+				this.prvPos = pos;
+			}
+
+			return changed;
 		}
 
-		private static bool Changed(Quaternion cur, Quaternion prv)
+		private bool Changed(Quaternion rot)
 		{
-			return Quaternion.Angle(cur, prv) > float.Epsilon;
+			var changed = Quaternion.Angle(this.prvRot, rot) > float.Epsilon;
+
+			if (changed)
+			{
+				this.prvRot = rot;
+			}
+
+			return changed;
 		}
 
 		public void UpdateTransform(Matrix4x4 vp)
@@ -32,13 +46,7 @@ namespace UnLighted
 			var pos = this.transform.position;
 			var rot = this.transform.rotation;
 
-			this.moved = MotionBlurObject.Changed(pos, this.prvPos) || MotionBlurObject.Changed(rot, this.prvRot);
-
-			if (this.moved)
-			{
-				this.prvPos = pos;
-				this.prvRot = rot;
-			}
+			this.moved = this.Changed(pos) || this.Changed(rot);
 
 			this.prvMVP = this.MVP;
 
@@ -56,7 +64,7 @@ namespace UnLighted
 
 			for (int i = 0; i < this.renderer.sharedMaterials.Length; i++)
 			{
-				if (mat.SetPass(2))
+				if (this.renderer.sharedMaterials[i].GetTag("RenderType", true) == "Opaque" && mat.SetPass(2))
 				{
 					Graphics.DrawMeshNow(this.mesh, this.transform.localToWorldMatrix, i);
 				}

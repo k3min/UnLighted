@@ -5,8 +5,9 @@ namespace UnLighted.ImageEffects
 	[AddComponentMenu("UnLighted/Image Effects/Color Grading")]
 	public class ColorGrading : ImageEffectBase
 	{
-		public Texture2D LUT;
 		private Texture3D lut;
+
+		public Texture2D LUT;
 
 		public override string Name
 		{
