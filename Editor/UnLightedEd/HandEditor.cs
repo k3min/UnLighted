@@ -9,18 +9,20 @@ namespace UnLightedEd
 	{
 		public override void OnInspectorGUI()
 		{
-			base.OnInspectorGUI();
+			this.DefaultInspector();
 
 			var trigger = this.target as Hand;
 
-			if (trigger.Holding != null)
+			if (trigger.Holding == null)
 			{
-				GUI.enabled = false;
-
-				EditorGUILayout.ObjectField("Holding", trigger.Holding, typeof(Rigidbody), false);
-
-				GUI.enabled = true;
+				return;
 			}
+
+			GUI.enabled = false;
+
+			EditorGUILayout.ObjectField("Holding", trigger.Holding, typeof(Rigidbody), false);
+
+			GUI.enabled = true;
 		}
 	}
 }

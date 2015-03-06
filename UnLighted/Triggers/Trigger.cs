@@ -6,7 +6,7 @@ namespace UnLighted.Triggers
 	[AddComponentMenu("UnLighted/Triggers/Trigger"), RequireComponent(typeof(Collider))]
 	public class Trigger : TriggerBase
 	{
-		private List<Collider> others = new List<Collider>();
+		private readonly List<Collider> others = new List<Collider>();
 
 		[HideInInspector]
 		public bool Toggle;

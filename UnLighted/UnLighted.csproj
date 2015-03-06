@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -8,6 +8,8 @@
     <RootNamespace>UnLighted</RootNamespace>
     <AssemblyName>UnLighted</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -35,19 +37,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Folder Include="Controllers\" />
-    <Folder Include="Managers\" />
-    <Folder Include="ImageEffects\" />
-    <Folder Include="Resources\" />
-    <Folder Include="Resources\Shaders\" />
-    <Folder Include="Resources\Shaders\ImageEffects\" />
-    <Folder Include="Resources\Shaders\Internal\" />
-    <Folder Include="Resources\Shaders\Includes\" />
-    <Folder Include="Resources\Shaders\Surfaces\" />
-    <Folder Include="Resources\Texture\" />
-    <Folder Include="Triggers\" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Controllers\CameraController.cs" />
     <Compile Include="Controllers\PlayerController.cs" />
     <Compile Include="ImageEffects\ImageEffectBase.cs" />
@@ -64,7 +53,6 @@
     <Compile Include="ImageEffects\BoxProbe.cs" />
     <Compile Include="ImageEffects\Bloom.cs" />
     <Compile Include="ImageEffects\HBAO.cs" />
-    <Compile Include="ImageEffects\Cinematic.cs" />
     <Compile Include="ImageEffects\ColorGrading.cs" />
     <Compile Include="ImageEffects\MotionBlur.cs" />
     <Compile Include="MotionBlurObject.cs" />
@@ -94,9 +82,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Resources\Shaders\Internal\PrePassLighting.shader">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\Shaders\ImageEffects\Cinematic.shader">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Resources\Shaders\ImageEffects\HBAO.shader">

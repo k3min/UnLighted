@@ -24,13 +24,13 @@ namespace UnLighted.Controllers
 			this.input.y = Mathf.Clamp(this.input.y, -90, 90);
 			this.rotation = Vector3.SmoothDamp(this.rotation, this.input, ref this.rotationV, this.Smoothing);
 
-			Vector3 zero = Vector3.zero;
+			var zero = Vector3.zero;
 
 			zero.x = this.rotation.y;
 			zero.y = this.rotation.x;
 			zero.z = this.rotationV.x * this.Tilt;
 
-			base.transform.localEulerAngles = zero;
+			this.transform.localEulerAngles = zero;
 		}
 	}
 }

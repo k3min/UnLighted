@@ -7,9 +7,18 @@ namespace UnLighted
 	public class Hand : MonoBehaviour
 	{
 		private Joint joint;
+		private RaycastHit hit;
 
 		public float MaxDistance = 2;
 		public float Break = 1000;
+
+		public bool Valid
+		{
+			get
+			{
+				return this.hit.rigidbody != null && !this.hit.rigidbody.isKinematic;
+			}
+		}
 
 		public Rigidbody Holding
 		{
@@ -27,6 +36,11 @@ namespace UnLighted
 
 				this.joint.connectedBody = value;
 			}
+		}
+
+		private void Awake()
+		{
+
 		}
 
 		private void Update()
@@ -47,14 +61,12 @@ namespace UnLighted
 			var origin = Camera.main.transform.position;
 			var direction = Camera.main.transform.forward;
 
-			RaycastHit hit;
-
-			if (!Physics.Raycast(origin, direction, out hit, this.MaxDistance))
+			if (!Physics.Raycast(origin, direction, out this.hit, this.MaxDistance))
 			{
 				return;
 			}
 
-			if (hit.rigidbody == null || hit.rigidbody.isKinematic)
+			if (!this.Valid)
 			{
 				return;
 			}
@@ -66,11 +78,12 @@ namespace UnLighted
 				this.joint.hideFlags = HideFlags.HideInInspector;
 
 				this.rigidbody.isKinematic = true;
+				this.rigidbody.useGravity = false;
 				this.rigidbody.solverIterationCount = PlayerController.SolverCount;
 				this.rigidbody.hideFlags = HideFlags.HideInInspector;
 			}
 
-			this.Holding = hit.rigidbody;
+			this.Holding = this.hit.rigidbody;
 			this.Holding.solverIterationCount = PlayerController.SolverCount;
 		}
 	}

@@ -11,62 +11,55 @@ namespace UnLighted
 		private Matrix4x4 MVP;
 		private Mesh mesh;
 		private bool moved;
+		private Material[] materials;
+
+		public bool Fixed { get { return this.rigidbody != null; } }
 
 		private void Awake()
 		{
 			this.mesh = this.GetComponent<MeshFilter>().mesh;
-		}
-
-		private bool Changed(Vector3 pos)
-		{
-			var changed = Vector3.Distance(this.prvPos, pos) > float.Epsilon;
-
-			if (changed)
-			{
-				this.prvPos = pos;
-			}
-
-			return changed;
-		}
-
-		private bool Changed(Quaternion rot)
-		{
-			var changed = Quaternion.Angle(this.prvRot, rot) > float.Epsilon;
-
-			if (changed)
-			{
-				this.prvRot = rot;
-			}
-
-			return changed;
+			this.materials = this.renderer.sharedMaterials;
 		}
 
 		public void UpdateTransform(Matrix4x4 vp)
 		{
-			var pos = this.transform.position;
-			var rot = this.transform.rotation;
+			var pos = Vector3.Distance(this.prvPos, this.transform.position) > float.Epsilon;
+			var rot = Quaternion.Angle(this.prvRot, this.transform.rotation) > float.Epsilon;
 
-			this.moved = this.Changed(pos) || this.Changed(rot);
+			if (pos)
+			{
+				this.prvPos = this.transform.position;
+			}
+
+			if (rot)
+			{
+				this.prvRot = this.transform.rotation;
+			}
+
+			this.moved = pos || rot;
 
 			this.prvMVP = this.MVP;
-
 			this.MVP = vp * this.transform.localToWorldMatrix;
 		}
 
-		public void RenderVectors(Material mat)
+		public void RenderVectors(Material material)
 		{
 			if (!this.renderer.isVisible || !this.moved)
 			{
 				return;
 			}
 
-			mat.SetMatrix("_Proj", this.prvMVP);
+			var matrix = this.transform.localToWorldMatrix;
 
-			for (int i = 0; i < this.renderer.sharedMaterials.Length; i++)
+			material.SetMatrix("_Proj", this.prvMVP);
+
+			for (var i = 0; i < this.materials.Length; i++)
 			{
-				if (this.renderer.sharedMaterials[i].GetTag("RenderType", true) == "Opaque" && mat.SetPass(2))
+				var type = this.materials[i].GetTag("RenderType", true);
+
+				if (type == "Opaque" && material.SetPass(2))
 				{
-					Graphics.DrawMeshNow(this.mesh, this.transform.localToWorldMatrix, i);
+					Graphics.DrawMeshNow(this.mesh, matrix, i);
 				}
 			}
 		}

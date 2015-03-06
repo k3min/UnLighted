@@ -22,6 +22,7 @@ namespace UnLighted
 		public PlatformMotion Motion;
 		public float Speed = 1;
 		public bool Normalize = true;
+		public bool Collision;
 		public string Tag = "Untagged";
 
 		public float T { get; private set; }
@@ -64,7 +65,9 @@ namespace UnLighted
 
 		private void OnCollisionEnter(Collision other)
 		{
-			if (this.Motion == PlatformMotion.Default || this.Tag != other.gameObject.tag)
+			if (!this.Collision ||
+			    this.Motion == PlatformMotion.Default ||
+			    this.Tag != other.gameObject.tag)
 			{
 				return;
 			}
@@ -87,7 +90,8 @@ namespace UnLighted
 
 		private void OnCollisionExit(Collision other)
 		{
-			if (this.Motion != PlatformMotion.AutoBack ||
+			if (!this.Collision ||
+			    this.Motion != PlatformMotion.AutoBack ||
 			    this.Tag != other.gameObject.tag ||
 			    this.time <= float.Epsilon ||
 			    this.time >= (1f - float.Epsilon))

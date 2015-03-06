@@ -11,22 +11,26 @@ namespace UnLighted.Managers
 		{
 			get
 			{
-				if (ManagerBase<T>.main == null)
-				{
-					ManagerBase<T>.main = Object.FindObjectOfType<T>();
+			    if (ManagerBase<T>.main != null)
+			    {
+			        return ManagerBase<T>.main;
+			    }
 
-					if (ManagerBase<T>.main == null)
-					{
-						var gameObject = new GameObject
-						{
-							hideFlags = HideFlags.DontSave
-						};
+			    ManagerBase<T>.main = Object.FindObjectOfType<T>();
 
-						ManagerBase<T>.main = gameObject.AddComponent<T>();
-					}
-				}
+			    if (ManagerBase<T>.main != null)
+			    {
+			        return ManagerBase<T>.main;
+			    }
 
-				return ManagerBase<T>.main;
+			    var gameObject = new GameObject
+			    {
+			        hideFlags = HideFlags.DontSave
+			    };
+
+			    ManagerBase<T>.main = gameObject.AddComponent<T>();
+
+			    return ManagerBase<T>.main;
 			}
 		}
 	}

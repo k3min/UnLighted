@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 
-// Analysis disable once InconsistentNaming
 namespace UnLighted.ImageEffects
 {
 	[AddComponentMenu(""), RequireComponent(typeof(Camera))]

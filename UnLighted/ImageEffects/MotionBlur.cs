@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnLighted.ImageEffects;
 using System.Collections.Generic;
 
 namespace UnLighted.ImageEffects
@@ -43,7 +42,8 @@ namespace UnLighted.ImageEffects
 			var w = Screen.width >> ImageEffectBase.Level(this.Downsample);
 			var h = Screen.height >> ImageEffectBase.Level(this.Downsample);
 
-			this.motion = new RenderTexture(w, h, 0, RenderTextureFormat.ARGBHalf);
+			this.motion = new RenderTexture(w, h, 0, RenderTextureFormat.RGHalf);
+			this.motion.Create();
 
 			foreach (var mr in Object.FindObjectsOfType<MeshRenderer>())
 			{
@@ -85,21 +85,17 @@ namespace UnLighted.ImageEffects
 
 		public override void OnRenderImage(RenderTexture a, RenderTexture b)
 		{
+			if (this.Debug)
+			{
+				Graphics.Blit(this.motion, b);
+				return;
+			}
+
 			this.Material.SetTexture("_MotionTex", this.motion);
 			this.Material.SetFloat("_MotionScale", (1f / this.TargetFPS) / Time.deltaTime);
 			this.Material.SetInt("_MaxSamples", this.MaxSamples);
 
 			Graphics.Blit(a, b, this.Material, 1);
-		}
-
-		private void OnGUI()
-		{
-			if (!this.Debug)
-			{
-				return;
-			}
-
-			GUI.DrawTexture(new Rect(0, 0, this.motion.width, this.motion.height), this.motion, ScaleMode.ScaleAndCrop, false);
 		}
 	}
 }

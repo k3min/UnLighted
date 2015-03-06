@@ -174,9 +174,11 @@ float SampleShadowCube(float3 vec)
 	for (int i = 0; i < 4; i++)
 	{
 		float4 sample;
-		float2 z = float2(1.0, -1.0) * (i + 1.0) * _Shadows.y;
 
-		if((i % 2) == 1)
+		float idx = i;
+		float2 z = float2(1.0, -1.0) * (idx + 1.0) * _Shadows.y;
+
+		if ((i % 2) == 1)
 		{
 			z = -z;
 		}
@@ -186,9 +188,7 @@ float SampleShadowCube(float3 vec)
 		sample.z = DecodeFloatRGBA(texCUBE(_ShadowMapTexture, vec + z.yxy));
 		sample.w = DecodeFloatRGBA(texCUBE(_ShadowMapTexture, vec + z.xyy));
 
-		float depth = fade - (((float)i) * _Shadows.w);
-
-		shadow += (sample < depth) ? _LightShadowData.r : 1.0;
+		shadow += (sample < (fade - (idx * _Shadows.w))) ? _LightShadowData.r : 1.0;
 	}
 
 	return dot(shadow, 1.0 / (4.0 * 4.0));

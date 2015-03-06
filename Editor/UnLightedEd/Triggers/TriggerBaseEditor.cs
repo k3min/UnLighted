@@ -18,7 +18,7 @@ namespace UnLightedEd.Triggers
 
 		public override void OnInspectorGUI()
 		{
-			base.OnInspectorGUI();
+			this.DefaultInspector();
 
 			this.serializedObject.Update();
 

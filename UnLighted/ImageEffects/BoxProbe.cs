@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
+using UnLighted.Managers;
 using System.IO;
 using System.Collections.Generic;
-using UnLighted;
-using UnLighted.Managers;
 
 namespace UnLighted.ImageEffects
 {
@@ -11,14 +10,14 @@ namespace UnLighted.ImageEffects
 		private const int size = 256;
 		private const string path = "UnLighted/Editor/Box";
 
-		private KeyValuePair<CubemapFace, Vector3>[] faces =
+		private readonly KeyValuePair<CubemapFace, Vector3>[] faces =
 			{
-				new KeyValuePair<CubemapFace, Vector3>(CubemapFace.NegativeX, new Vector3(0, 270, 0)),
-				new KeyValuePair<CubemapFace, Vector3>(CubemapFace.NegativeY, new Vector3(90, 0, 0)),
-				new KeyValuePair<CubemapFace, Vector3>(CubemapFace.NegativeZ, new Vector3(0, 180, 0)),
-				new KeyValuePair<CubemapFace, Vector3>(CubemapFace.PositiveX, new Vector3(0, 90, 0)),
-				new KeyValuePair<CubemapFace, Vector3>(CubemapFace.PositiveY, new Vector3(270, 0, 0)),
-				new KeyValuePair<CubemapFace, Vector3>(CubemapFace.PositiveZ, new Vector3(0, 0, 0))
+				new KeyValuePair<CubemapFace, Vector3>(CubemapFace.NegativeX, new Vector3(0, 270)),
+				new KeyValuePair<CubemapFace, Vector3>(CubemapFace.NegativeY, new Vector3(90, 0)),
+				new KeyValuePair<CubemapFace, Vector3>(CubemapFace.NegativeZ, new Vector3(0, 180)),
+				new KeyValuePair<CubemapFace, Vector3>(CubemapFace.PositiveX, new Vector3(0, 90)),
+				new KeyValuePair<CubemapFace, Vector3>(CubemapFace.PositiveY, new Vector3(270, 0)),
+				new KeyValuePair<CubemapFace, Vector3>(CubemapFace.PositiveZ, new Vector3(0, 0))
 			};
 
 		private Texture2D tex;
@@ -46,14 +45,14 @@ namespace UnLighted.ImageEffects
 
 			this.tex = new Texture2D(BoxProbe.size, BoxProbe.size, TextureFormat.ARGB32, false, true);
 
-			var path = string.Format(
-				           "{0}/{1}/{2}",
-				           Application.dataPath,
-				           BoxProbe.path,
-				           this.gameObject.name
-			           );
+			var p = string.Format(
+				        "{0}/{1}/{2}",
+				        Application.dataPath,
+				        BoxProbe.path,
+				        this.gameObject.name
+			        );
 
-			Directory.CreateDirectory(path);
+			Directory.CreateDirectory(p);
 		}
 
 		private void Update()
@@ -82,15 +81,15 @@ namespace UnLighted.ImageEffects
 
 			RenderTexture.ReleaseTemporary(rt);
 
-			var path = string.Format(
-				           "{0}/{1}/{2}/{3}.png",
-				           Application.dataPath,
-				           BoxProbe.path,
-				           this.gameObject.name,
-				           System.Enum.GetName(typeof(CubemapFace), this.faces[this.i].Key)
-			           );
+			var p = string.Format(
+				        "{0}/{1}/{2}/{3}.png",
+				        Application.dataPath,
+				        BoxProbe.path,
+				        this.gameObject.name,
+				        System.Enum.GetName(typeof(CubemapFace), this.faces[this.i].Key)
+			        );
 
-			File.WriteAllBytes(path, this.tex.EncodeToPNG());
+			File.WriteAllBytes(p, this.tex.EncodeToPNG());
 
 			Graphics.Blit(a, b);
 
@@ -150,7 +149,7 @@ namespace UnLighted.ImageEffects
 				lig.enabled = restore;
 			}
 
-			var cubemap = restore ? BoxManager.Main.Current.Cubemap : new Cubemap(4, TextureFormat.ARGB32, false);
+			var cubemap = restore ? BoxManager.Main.Box.Cubemap : new Cubemap(4, TextureFormat.ARGB32, false);
 
 			Shader.SetGlobalTexture("_Box", cubemap);
 		}

@@ -72,7 +72,7 @@
 
 				i.screen.xy += normal.xy * 0.5;
 
-				float3 res = tex2D(_GrabTexture, i.screen.xy / i.screen.w).rgb * _Color;
+				float3 res = tex2Dproj(_GrabTexture, UNITY_PROJ_COORD(i.screen)).rgb * _Color;
 
 				i.viewDir = normalize(i.viewDir);
 

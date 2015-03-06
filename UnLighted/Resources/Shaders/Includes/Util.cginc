@@ -46,12 +46,4 @@ float3 DecodeNormal(float2 enc)
 	return float3(den * q, zsign * (den - 1.0));
 }
 
-float2 MotionVector(float4 cur, float4 prv)
-{
-	float2 a = cur.xy / cur.w;
-	float2 b = prv.xy / prv.w;
-
-	return saturate(((a - b) * 0.5) + 0.5);
-}
-
 #endif

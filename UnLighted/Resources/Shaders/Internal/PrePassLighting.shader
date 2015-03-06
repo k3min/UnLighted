@@ -59,10 +59,9 @@
 			{
 				i.ray *= _ProjectionParams.z / i.ray.z;
 
-				float2 uv = i.uv.xy / i.uv.w;
-				float depth = Linear01Depth(tex2D(_CameraDepthTexture, uv).x);
+				float depth = Linear01Depth(tex2Dproj(_CameraDepthTexture, UNITY_PROJ_COORD(i.uv)).x);
 
-				float4 viewPos = float4(i.ray * depth, 1);
+				float4 viewPos = float4(i.ray * depth, 1.0);
 				float3 worldPos = mul(_CameraToWorld, viewPos).xyz;
 
 				float fade = distance(worldPos, unity_ShadowFadeCenterAndType.xyz);
@@ -76,7 +75,7 @@
 					discard;
 				}
 
-				float4 buffer = tex2D(_CameraNormalsTexture, uv);
+				float4 buffer = tex2Dproj(_CameraNormalsTexture, UNITY_PROJ_COORD(i.uv));
 				float3 normal = DecodeNormal(buffer.xy);
 				float a = max(buffer.z, EPSILON);
 				float metallic = buffer.w;
@@ -84,7 +83,7 @@
 				float3 light = _LightPos.xyz - worldPos;
 				float3 lightDir = normalize(light);
 
-				uv = dot(light, light) * _LightPos.w;
+				float2 uv = dot(light, light) * _LightPos.w;
 
 				float atten = tex2D(_LightTextureB0, uv).UNITY_ATTEN_CHANNEL;
 

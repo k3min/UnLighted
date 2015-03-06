@@ -13,6 +13,7 @@ namespace UnLightedEd
 		private SerializedProperty motionP;
 		private SerializedProperty normalizeP;
 		private SerializedProperty tagP;
+		private SerializedProperty collisionP;
 
 		private void OnEnable()
 		{
@@ -22,6 +23,7 @@ namespace UnLightedEd
 			this.motionP = this.serializedObject.FindProperty("Motion");
 			this.normalizeP = this.serializedObject.FindProperty("Normalize");
 			this.tagP = this.serializedObject.FindProperty("Tag");
+			this.collisionP = this.serializedObject.FindProperty("Collision");
 		}
 
 		public override void OnInspectorGUI()
@@ -32,24 +34,20 @@ namespace UnLightedEd
 			EditorGUILayout.PropertyField(this.speedP);
 			EditorGUILayout.PropertyField(this.motionP);
 
-			GUI.enabled = (this.motionP.enumValueIndex != (int)PlatformMotion.Default);
+			this.normalizeP.boolValue = GUILayout.Toggle(this.normalizeP.boolValue, "Normalize", EditorStyles.miniButton);
+			this.smoothP.boolValue = GUILayout.Toggle(this.smoothP.boolValue, "Smooth", EditorStyles.miniButton);
+
+			EditorGUILayout.Separator();
+
+			GUI.enabled = this.motionP.enumValueIndex != (int)PlatformMotion.Default;
+
+			this.collisionP.boolValue = GUILayout.Toggle(this.collisionP.boolValue, "Collision", EditorStyles.miniButton);
+
+			GUI.enabled &= this.collisionP.boolValue;
 
 			this.tagP.stringValue = EditorGUILayout.TagField("Tag", this.tagP.stringValue);
 
 			GUI.enabled = true;
-
-			this.normalizeP.boolValue = GUILayout.Toggle(this.normalizeP.boolValue, "Normalize", EditorStyles.miniButton);
-
-			this.smoothP.boolValue = GUILayout.Toggle(this.smoothP.boolValue, "Smooth", EditorStyles.miniButton);
-
-			if (EditorApplication.isPlaying)
-			{
-				GUI.enabled = false;
-
-				EditorGUILayout.TextField("Time", (this.target as Platform).T.ToString("F"));
-
-				GUI.enabled = true;
-			}
 
 			this.target.Hint<Platform>(x => x.rigidbody.isKinematic, "You may want to make the rigidbody kinematic", MessageType.Info);
 
@@ -69,9 +67,9 @@ namespace UnLightedEd
 
 			platform.To = platform.transform.InverseTransformPoint(point);
 
-			platform.To.x = Mathf.Round(platform.To.x * 100f) * 0.01f;
-			platform.To.y = Mathf.Round(platform.To.y * 100f) * 0.01f;
-			platform.To.z = Mathf.Round(platform.To.z * 100f) * 0.01f;
+			platform.To.x = (float)System.Math.Round(platform.To.x, 4);
+			platform.To.y = (float)System.Math.Round(platform.To.y, 4);
+			platform.To.z = (float)System.Math.Round(platform.To.z, 4);
 
 			platform.Save();
 		}

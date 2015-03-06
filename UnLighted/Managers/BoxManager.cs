@@ -5,7 +5,7 @@ namespace UnLighted.Managers
 	[AddComponentMenu("UnLighted/Managers/Box Manager")]
 	public class BoxManager : ManagerBase<BoxManager>
 	{
-		public Box Current { get; private set; }
+		public Box Box { get; private set; }
 
 		private void Update()
 		{
@@ -40,7 +40,7 @@ namespace UnLighted.Managers
 				}
 			}
 
-			if (res == null || res == this.Current)
+			if (res == null || res == this.Box)
 			{
 				return;
 			}
@@ -49,7 +49,7 @@ namespace UnLighted.Managers
 			Shader.SetGlobalVector("_BoxSize", res.Size);
 			Shader.SetGlobalVector("_BoxPos", res.Pos);
 
-			this.Current = res;
+			this.Box = res;
 		}
 	}
 }

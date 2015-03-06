@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -39,11 +39,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Folder Include="Managers\" />
-    <Folder Include="Triggers\" />
-    <Folder Include="Box\" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Managers\ShaderManagerEditor.cs" />
     <Compile Include="BoxEditor.cs" />
     <Compile Include="Triggers\TriggerBaseEditor.cs" />
@@ -52,6 +47,7 @@
     <Compile Include="HandEditor.cs" />
     <Compile Include="Util.cs" />
     <Compile Include="UberMaterialEditor.cs" />
+    <Compile Include="Managers\BoxManagerEditor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Box\CubeMapGen.exe">

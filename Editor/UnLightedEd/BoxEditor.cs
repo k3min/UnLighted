@@ -10,7 +10,7 @@ namespace UnLightedEd
 	{
 		public override void OnInspectorGUI()
 		{
-			base.OnInspectorGUI();
+			this.DefaultInspector();
 
 			this.target.Hint<Box>(x => LayerMask.LayerToName(x.gameObject.layer) == "Box", "GameObject isn't in the \"Box\" layer!");
 
