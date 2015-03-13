@@ -17,6 +17,8 @@
 		#pragma fragmentoption ARB_precision_hint_fastest
 		#pragma only_renderers d3d11 opengl
 
+		#define MAX_SAMPLES 30
+
 		float4x4 _Proj;
 
 		float2 EncodeMotion(float4 cur, float4 prv)
@@ -65,7 +67,6 @@
 
 			sampler2D _MotionTex;
 			float _MotionScale;
-			int _MaxSamples;
 
 			float4 frag(v2f_img i) : COLOR
 			{
@@ -74,7 +75,7 @@
 				vel *= _MotionScale;
 
 				int magnitude = round(length(vel * _MainTex_TexelSize.zw));
-				int samples = clamp(magnitude, 1, _MaxSamples);
+				int samples = clamp(magnitude, 1, MAX_SAMPLES);
 
 				float4 res = tex2D(_MainTex, i.uv);
 

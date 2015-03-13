@@ -11,7 +11,6 @@ namespace UnLighted.ImageEffects
 		private Matrix4x4 VP;
 
 		public float TargetFPS = 60;
-		public int MaxSamples = 32;
 		public int Downsample = 1;
 		public bool Debug;
 
@@ -93,7 +92,6 @@ namespace UnLighted.ImageEffects
 
 			this.Material.SetTexture("_MotionTex", this.motion);
 			this.Material.SetFloat("_MotionScale", (1f / this.TargetFPS) / Time.deltaTime);
-			this.Material.SetInt("_MaxSamples", this.MaxSamples);
 
 			Graphics.Blit(a, b, this.Material, 1);
 		}
