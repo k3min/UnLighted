@@ -25,8 +25,7 @@ What's already there:
 - LUT based color grading
 - Physically based über shader (with glass variant)
 - Box projected cubemaps (with tools to render them)
-- Optimized lighting pass
-- Better soft shadows
+- Optimized lighting pass & better soft shadows (at this point, point support only)
 - Rigid player controller with optional head bob
 - Separate camera controller with smooth free look
 - Awesome trigger system
