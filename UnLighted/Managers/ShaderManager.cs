@@ -18,7 +18,7 @@ namespace UnLighted.Managers
 					Type = ShaderPropertyType.Vector,
 					Key = "_Shadows",
 					Vector = new Vector4(0, 0.01f, 0.02f, 0.01f),
-					X = "Unused",
+					X = "<i>Unused</i>",
 					Y = "Kernel Size",
 					Z = "Bias Base",
 					W = "Bias Scale"

@@ -38,7 +38,7 @@ namespace UnLightedEd
 
 			i.NextVisible(true);
 
-			while (i.NextVisible(false))
+			while (i.NextVisible(true))
 			{
 				EditorGUILayout.PropertyField(i, true);
 			}

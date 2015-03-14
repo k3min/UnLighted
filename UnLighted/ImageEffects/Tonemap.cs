@@ -11,6 +11,8 @@ namespace UnLighted.ImageEffects
 		public int MipLevel = 8;
 		public float AdaptionRate = 2.5f;
 		public float Exposure = 1;
+
+		[HideInInspector]
 		public bool Debug;
 
 		public override string Name

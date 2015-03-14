@@ -9,14 +9,16 @@ namespace UnLightedEd.Managers
 	{
 		private SerializedProperty propertiesP;
 
+		private static GUIStyle label;
+
 		private void OnEnable()
 		{
-			this.propertiesP = base.serializedObject.FindProperty("Properties");
+			this.propertiesP = this.serializedObject.FindProperty("Properties");
 		}
 
 		public override void OnInspectorGUI()
 		{
-			base.serializedObject.Update();
+			this.serializedObject.Update();
 
 			for (var i = 0; i < this.propertiesP.arraySize; i++)
 			{
@@ -78,16 +80,21 @@ namespace UnLightedEd.Managers
 				Application.CaptureScreenshot(Time.frameCount + ".png");
 			}
 
-			base.serializedObject.ApplyModifiedProperties();
+			this.serializedObject.ApplyModifiedProperties();
 		}
 
 		private static float VectorField(SerializedProperty property, float value)
 		{
+			if (ShaderManagerEditor.label == null)
+			{
+				ShaderManagerEditor.label = new GUIStyle(EditorStyles.label) { richText = true };
+			}
+
 			var width = EditorGUIUtility.labelWidth;
 
 			EditorGUILayout.BeginHorizontal();
 			{
-				property.stringValue = EditorGUILayout.TextField("", property.stringValue, EditorStyles.label, GUILayout.Width(width));
+				property.stringValue = GUILayout.TextField(property.stringValue, ShaderManagerEditor.label, GUILayout.Width(width));
 
 				EditorGUIUtility.labelWidth = 13;
 

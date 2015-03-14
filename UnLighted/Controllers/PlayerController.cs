@@ -55,10 +55,10 @@ namespace UnLighted.Controllers
 
 			if (this.canWalk)
 			{
-				var movem = this.Movement;
-				var condi = (movem.Speed > float.Epsilon && Input.GetButton("Sprint"));
+				var move = this.Movement;
+				var cond = (move.Speed > float.Epsilon && Input.GetButton("Sprint"));
 
-				this.speed = Mathf.Lerp(this.speed, condi ? movem.Sprint : movem.Speed, Time.fixedDeltaTime * 2f);
+				this.speed = Mathf.Lerp(this.speed, cond ? move.Sprint : move.Speed, Time.fixedDeltaTime * 2f);
 
 				this.rigidbody.MovePosition(this.rigidbody.position + (this.direction * this.speed * Time.fixedDeltaTime));
 			}

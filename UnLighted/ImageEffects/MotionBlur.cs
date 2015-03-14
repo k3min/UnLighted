@@ -12,6 +12,8 @@ namespace UnLighted.ImageEffects
 
 		public float TargetFPS = 60;
 		public int Downsample = 1;
+
+		[HideInInspector]
 		public bool Debug;
 
 		private RenderTexture motion;

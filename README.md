@@ -1,10 +1,6 @@
 UnLighted
 =========
 
-![image](http://i.imgur.com/0Nf7Vsp.png)
-
-> A picture says more than a thousand words
-
 More info soon.
 For now, UnLighted expects:
 
@@ -19,7 +15,6 @@ What's already there:
 
 - Per-object motion blur
 - (Hejl) Tonemapping
-- Screen space ambient occlusion
 - Lens distortion
 - Bloom
 - LUT based color grading
@@ -32,3 +27,15 @@ What's already there:
 - Moving platform component
 - Manager class
 - *Hand* component
+- Game manager with scriptable states
+
+Demo Time!
+----------
+
+![image](http://i.imgur.com/yI7ZXVS.png)
+
+![image](http://i.imgur.com/IlgBi9J.png)
+
+![image](http://i.imgur.com/GRRjSxl.png)
+
+![image](http://i.imgur.com/0Nf7Vsp.png)

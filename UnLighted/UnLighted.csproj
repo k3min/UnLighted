@@ -52,12 +52,12 @@
     <Compile Include="Triggers\TriggerBase.cs" />
     <Compile Include="ImageEffects\BoxProbe.cs" />
     <Compile Include="ImageEffects\Bloom.cs" />
-    <Compile Include="ImageEffects\HBAO.cs" />
     <Compile Include="ImageEffects\ColorGrading.cs" />
     <Compile Include="ImageEffects\MotionBlur.cs" />
     <Compile Include="MotionBlurObject.cs" />
     <Compile Include="Platform.cs" />
     <Compile Include="Hand.cs" />
+    <Compile Include="GameState.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\ImageEffects\Tonemap.shader">
@@ -82,9 +82,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Resources\Shaders\Internal\PrePassLighting.shader">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Resources\Shaders\ImageEffects\HBAO.shader">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Resources\Texture\Random.png">

@@ -8,6 +8,8 @@
     <RootNamespace>UnLightedEd</RootNamespace>
     <AssemblyName>UnLightedEd</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -48,6 +50,9 @@
     <Compile Include="Util.cs" />
     <Compile Include="UberMaterialEditor.cs" />
     <Compile Include="Managers\BoxManagerEditor.cs" />
+    <Compile Include="ImageEffects\ImageEffectBaseEditor.cs" />
+    <Compile Include="Managers\GameManagerEditor.cs" />
+    <Compile Include="GameStateEditor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Box\CubeMapGen.exe">
@@ -63,5 +68,8 @@
       <Name>UnLighted</Name>
       <Private>False</Private>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ImageEffects\" />
   </ItemGroup>
 </Project>
