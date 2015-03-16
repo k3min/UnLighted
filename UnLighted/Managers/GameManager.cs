@@ -7,9 +7,10 @@ namespace UnLighted.Managers
 	[AddComponentMenu("UnLighted/Managers/Game Manager")]
 	public class GameManager : ManagerBase<GameManager>
 	{
-		[SerializeField]
+		[HideInInspector, SerializeField]
 		private int index;
 
+		[HideInInspector]
 		public GameState[] States;
 
 		public GameState State
@@ -22,28 +23,20 @@ namespace UnLighted.Managers
 			set
 			{
 				this.State.End();
+
 				this.index = System.Array.IndexOf<GameState>(this.States, value);
+
 				this.State.Start();
 			}
 		}
 
-		private void Awake()
+		public virtual void Awake()
 		{
-			if (this.State == null)
-			{
-				return;
-			}
-
 			this.State.Start();
 		}
 
-		private void Update()
+		public virtual void Update()
 		{
-			if (this.State == null)
-			{
-				return;
-			}
-
 			this.State.Update();
 		}
 	}

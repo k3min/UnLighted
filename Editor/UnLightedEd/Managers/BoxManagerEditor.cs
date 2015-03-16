@@ -1,7 +1,8 @@
 ﻿using UnityEditor;
 using UnityEngine;
-using UnLighted.Managers;
 using UnLighted;
+using UnLighted.Managers;
+using System.Collections.Generic;
 
 namespace UnLightedEd.Managers
 {
@@ -10,26 +11,41 @@ namespace UnLightedEd.Managers
 	{
 		private Box[] boxes;
 
-		private void Awake()
+		private static Dictionary<Box, GUIContent> content = new Dictionary<Box, GUIContent>();
+
+		private void OnEnable()
 		{
 			this.boxes = Object.FindObjectsOfType<Box>();
 		}
 
 		public override void OnInspectorGUI()
 		{
-			if (this.boxes != null)
+			foreach (var box in this.boxes)
 			{
-				GUI.enabled = false;
-
-				foreach (var box in this.boxes)
-				{
-					EditorGUILayout.ObjectField(box.name, box, typeof(Box), true);
-				}
-
-				GUI.enabled = true;
+				GUILayout.Label(BoxManagerEditor.Content(box), Util.AlignedLabel(TextAnchor.MiddleLeft));
 			}
 
 			Util.Hint(LayerMask.NameToLayer("Box") != -1, "The \"Box\" layer doesn't exist!");
+		}
+
+		private void OnSceneGUI()
+		{
+			if (this.boxes != null)
+			{
+				foreach (var box in this.boxes)
+				{
+					Handles.Label(box.Pos, BoxManagerEditor.Content(box), Util.AlignedLabel(TextAnchor.MiddleCenter));
+				}
+			}
+		}
+
+		private static GUIContent Content(Box b)
+		{
+			GUIContent c;
+
+			BoxManagerEditor.content.TryGetValue(b, out c);
+
+			return c ?? (BoxManagerEditor.content[b] = new GUIContent(b.name, AssetPreview.GetMiniThumbnail(b.Cubemap)));
 		}
 	}
 }

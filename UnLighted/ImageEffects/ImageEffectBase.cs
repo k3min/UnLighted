@@ -2,8 +2,8 @@
 
 namespace UnLighted.ImageEffects
 {
-	[AddComponentMenu(""), RequireComponent(typeof(Camera))]
-	public class ImageEffectBase : MonoBehaviour
+	[RequireComponent(typeof(Camera))]
+	public abstract class ImageEffectBase : MonoBehaviour
 	{
 		public Material Material
 		{

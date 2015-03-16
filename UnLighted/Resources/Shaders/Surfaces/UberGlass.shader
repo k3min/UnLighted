@@ -5,7 +5,7 @@
 		_Color("Color", Color) = (1, 1, 1)
 		_Normal("Normal", 2D) = "bump" {}
 		_Roughness("Roughness", 2D) = "white" {}
-		_Params("Scale, Roughness, Height", Vector) = (1, 1, 1, 0)
+		_Params("Scale, Roughness, Height, ETA", Vector) = (1, 1, 1, 0)
 		[HideInInspector]
 		_Hack("", 2D) = "bump" {}
 	}
@@ -14,13 +14,9 @@
 	{
 		Tags
 		{
-			"Queue" = "Transparent"
 			"RenderType" = "Transparent"
 			"IgnoreProjector" = "True"
 		}
-
-		Cull Off
-		ZWrite Off
 
 		CGINCLUDE
 
@@ -37,6 +33,7 @@
 		#pragma only_renderers d3d11 opengl
 
 		#pragma multi_compile REFLECTIONS_OFF REFLECTIONS_ON
+		#pragma multi_compile REFRACTIONS_OFF REFRACTIONS_ON
 
 		float3 _Color;
 		sampler2D _Normal;
@@ -70,11 +67,13 @@
 				float3 normal = UnpackNormal(lerp(n0, n1, params.z));
 				float a = max(tex2D(_Roughness, uv).r * params.y, EPSILON);
 
-				i.screen.xy += normal.xy * 0.5;
+				i.viewDir = normalize(i.viewDir);
+
+			#ifdef REFRACTIONS_ON
+				i.screen.xyz += refract(i.viewDir, normal, _Params.w);
+			#endif
 
 				float3 res = tex2Dproj(_GrabTexture, UNITY_PROJ_COORD(i.screen)).rgb * _Color;
-
-				i.viewDir = normalize(i.viewDir);
 
 				float3 h = normalize(i.multi.xyz + i.viewDir);
 				float NdL = saturate(dot(normal, i.multi.xyz));

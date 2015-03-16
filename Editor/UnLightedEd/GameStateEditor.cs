@@ -8,11 +8,6 @@ namespace UnLightedEd
 	[CustomEditor(typeof(GameState), true)]
 	internal class GameStateEditor : Editor
 	{
-		public override void OnInspectorGUI()
-		{
-			this.DefaultInspector();
-		}
-
 		[MenuItem("Assets/Create/Game State")]
 		private static void Create()
 		{
@@ -25,15 +20,20 @@ namespace UnLightedEd
 		[MenuItem("Assets/Create/Game State", true)]
 		private static bool Validate()
 		{
+			var type = typeof(GameState);
 			var active = Selection.activeObject as MonoScript;
-			var type = active.GetClass();
 
-			return active != null && type.IsSubclassOf(typeof(GameState));
+			return active != null && active.GetClass().IsSubclassOf(type);
+		}
+
+		public override void OnInspectorGUI()
+		{
+			this.DefaultInspector();
 		}
 
 		public static GameState[] FindAll()
 		{
-			return AssetDatabase.FindAssets("t:GameState").Select(x => GameStateEditor.FromGUID(x)).ToArray();
+			return AssetDatabase.FindAssets("t:" + typeof(GameState).Name).Select(GameStateEditor.FromGUID).ToArray();
 		}
 
 		private static GameState FromGUID(string guid)

@@ -1,54 +1,54 @@
 ﻿using UnityEditor;
+using UnityEngine;
 using UnLighted;
 using UnLighted.Managers;
 using System.Linq;
 
 namespace UnLightedEd.Managers
 {
-	[CustomEditor(typeof(GameManager))]
+	[CustomEditor(typeof(GameManager), true)]
 	internal class GameManagerEditor : Editor
 	{
-		private SerializedProperty indexP;
-		private SerializedProperty statesP;
+		private SerializedProperty iP;
+		private SerializedProperty sP;
 
 		private void OnEnable()
 		{
-			this.indexP = this.serializedObject.FindProperty("index");
-			this.statesP = this.serializedObject.FindProperty("States");
+			this.iP = this.serializedObject.FindProperty("index");
+			this.sP = this.serializedObject.FindProperty("States");
 		}
 
 		public override void OnInspectorGUI()
 		{
-			var states = GameStateEditor.FindAll();
-			var length = states.Length;
+			this.DefaultInspector();
+
+			var a = GameStateEditor.FindAll();
+			var l = a.Length;
 
 			this.serializedObject.Update();
 
-			this.statesP.arraySize = length;
+			this.sP.arraySize = l;
 
-			for (var i = 0; i < length; i++)
+			if (l > 0)
 			{
-				this.statesP.GetArrayElementAtIndex(i).objectReferenceValue = states[i];
-			}
+				for (var j = 0; j < l; j++)
+				{
+					this.sP.GetArrayElementAtIndex(j).objectReferenceValue = a[j];
+				}
 
-			if (length > 0)
-			{
-				var i = this.indexP.intValue;
-				var d = states.Select(x => x.name).ToArray();
+				var d = a.Select(x => x.name).ToArray();
+				var i = EditorGUILayout.Popup("State", this.iP.intValue, d);
+				var s = this.sP.GetArrayElementAtIndex(i).objectReferenceValue;
 
-				i = EditorGUILayout.Popup("State", i, d);
-
-				this.indexP.intValue = i;
-
-				var s = this.statesP.GetArrayElementAtIndex(i).objectReferenceValue;
+				this.iP.intValue = i;
 
 				Editor.CreateEditor(s).OnInspectorGUI();
 			}
 
 			this.serializedObject.ApplyModifiedProperties();
 
-			Util.Hint(states.Length > 0, "No GameStates!");
-			Util.Hint(states.Length > 0, "Right-click on a GameState script and select \"Create > Game State\"", MessageType.Info);
+			Util.Hint(l > 0, "No GameStates!");
+			Util.Hint(l > 0, "Right-click on a GameState script and select \"Create > Game State\"", MessageType.Info);
 		}
 	}
 }

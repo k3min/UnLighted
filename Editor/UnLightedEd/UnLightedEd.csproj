@@ -55,10 +55,10 @@
     <Compile Include="GameStateEditor.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Box\CubeMapGen.exe">
+    <None Include="Box\Bake.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Box\Box.bat">
+    <None Include="Box\CubeMapGen.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

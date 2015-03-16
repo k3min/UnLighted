@@ -2,7 +2,6 @@
 
 namespace UnLighted.Managers
 {
-	[AddComponentMenu("")]
 	public abstract class ManagerBase<T> : MonoBehaviour where T : ManagerBase<T>
 	{
 		private static T main;

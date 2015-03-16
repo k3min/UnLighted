@@ -2,13 +2,18 @@
 
 namespace UnLighted
 {
-	[System.Serializable]
 	public abstract class GameState : ScriptableObject
 	{
-		public abstract void Start();
+		public virtual void Start()
+		{
+		}
 
-		public abstract void Update();
+		public virtual void Update()
+		{
+		}
 
-		public abstract void End();
+		public virtual void End()
+		{
+		}
 	}
 }

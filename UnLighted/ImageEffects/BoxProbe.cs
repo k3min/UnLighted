@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 namespace UnLighted.ImageEffects
 {
+	[AddComponentMenu("")]
 	public class BoxProbe : ImageEffectBase
 	{
 		private const int size = 256;

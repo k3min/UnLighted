@@ -1,10 +1,36 @@
 ﻿using UnityEditor;
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace UnLightedEd
 {
 	internal static class Util
 	{
+		private static Dictionary<TextAnchor, GUIStyle> label = new Dictionary<TextAnchor, GUIStyle>();
+		private static GUIStyle richLabel;
+
+		public static GUIStyle AlignedLabel(TextAnchor a)
+		{
+			GUIStyle s;
+
+			Util.label.TryGetValue(a, out s);
+
+			return s ?? (Util.label[a] = new GUIStyle(EditorStyles.label) { alignment = a });
+		}
+
+		public static GUIStyle RichLabel
+		{
+			get
+			{
+				if (Util.richLabel == null)
+				{
+					Util.richLabel = new GUIStyle(EditorStyles.label) { richText = true };
+				}
+
+				return Util.richLabel;
+			}
+		}
+
 		public static void Hint(bool cond, string hint, MessageType type = MessageType.Warning)
 		{
 			if (cond)

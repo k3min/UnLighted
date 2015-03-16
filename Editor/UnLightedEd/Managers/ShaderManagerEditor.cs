@@ -9,8 +9,6 @@ namespace UnLightedEd.Managers
 	{
 		private SerializedProperty propertiesP;
 
-		private static GUIStyle label;
-
 		private void OnEnable()
 		{
 			this.propertiesP = this.serializedObject.FindProperty("Properties");
@@ -85,16 +83,11 @@ namespace UnLightedEd.Managers
 
 		private static float VectorField(SerializedProperty property, float value)
 		{
-			if (ShaderManagerEditor.label == null)
-			{
-				ShaderManagerEditor.label = new GUIStyle(EditorStyles.label) { richText = true };
-			}
-
 			var width = EditorGUIUtility.labelWidth;
 
 			EditorGUILayout.BeginHorizontal();
 			{
-				property.stringValue = GUILayout.TextField(property.stringValue, ShaderManagerEditor.label, GUILayout.Width(width));
+				property.stringValue = GUILayout.TextField(property.stringValue, Util.RichLabel, GUILayout.Width(width));
 
 				EditorGUIUtility.labelWidth = 13;
 
