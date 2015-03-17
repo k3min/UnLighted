@@ -27,6 +27,7 @@ v2f_uber vert_uber(appdata_full v)
 	o.color = v.color;
 	o.uv.xy = v.texcoord.xy;
 	o.screen = ComputeScreenPos(o.pos);
+	o.worldPos = mul(_Object2World, v.vertex).xyz;
 
 	float3 viewDir = ObjSpaceViewDir(v.vertex);
 	float3 worldRefl = mul((float3x3)_Object2World, -viewDir);
@@ -37,7 +38,6 @@ v2f_uber vert_uber(appdata_full v)
 	o.TtoW1 = float4(mul(rotation, _Object2World[1].xyz), worldRefl.y);
 	o.TtoW2 = float4(mul(rotation, _Object2World[2].xyz), worldRefl.z);
 
-	o.worldPos = mul(_Object2World, v.vertex).xyz;
 	o.viewDir = mul(rotation, viewDir);
 
 #ifndef UNITY_PASS_FORWARDBASE
@@ -75,6 +75,20 @@ v2f_shadow vert_shadow(appdata_full v)
 	return o;
 }
 
+float Fade(v2f_uber i)
+{
+#ifdef LIGHTMAP_ON
+	float fade = length(i.multi);
+
+	fade *= unity_LightmapFade.z;
+	fade += unity_LightmapFade.w;
+
+	return saturate(fade);
+#endif
+
+	return 0.0;
+}
+
 float3 BPCEM(v2f_uber i, float3 n)
 {
 	float3 a = float3(i.TtoW0.w, i.TtoW1.w, i.TtoW2.w);
@@ -90,23 +104,25 @@ float3 BPCEM(v2f_uber i, float3 n)
 	return i.worldPos + (r * min(min(plane.x, plane.y), plane.z)) - _BoxPos;
 }
 
-float4 Lighting(v2f_uber i)
+float4 Lighting(v2f_uber i, float f)
 {
-	float4 light = tex2Dproj(_LightBuffer, UNITY_PROJ_COORD(i.screen));
+	float4 lm = tex2Dproj(_LightBuffer, UNITY_PROJ_COORD(i.screen));
 
-#ifndef LIGHTMAP_OFF
-	float3 lightMap = DecodeLightmap(tex2D(unity_Lightmap, i.uv.zw));
-	float3 lightMapInd = DecodeLightmap(tex2D(unity_LightmapInd, i.uv.zw));
-	float2 lightMapFade = unity_LightmapFade.zw;
+#ifdef LIGHTMAP_ON
+	if (f > 0.0)
+	{
+		lm.rgb += DecodeLightmap(tex2D(unity_Lightmap, i.uv.zw)) * f;
+	}
 
-	float fade = (length(i.multi) * lightMapFade.x) + lightMapFade.y;
-
-	light.rgb += lerp(lightMapInd, lightMap, saturate(fade));
+	if (f < 1.0)
+	{
+		lm.rgb += DecodeLightmap(tex2D(unity_LightmapInd, i.uv.zw)) * (1.0 - f);
+	}
 #else
-	light.rgb += i.multi.rgb;
+	lm.rgb += i.multi.rgb;
 #endif
 
-	return light;
+	return lm;
 }
 
 float D(float a, float NdH)

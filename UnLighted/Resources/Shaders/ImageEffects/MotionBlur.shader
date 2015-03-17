@@ -129,10 +129,10 @@
 
 			float4 frag(v2f i) : COLOR
 			{
-				float d = tex2Dproj(_CameraDepthTexture, UNITY_PROJ_COORD(i.screen)).x;
 				float z = ((i.screen.z / i.screen.w) * 0.5) + 0.5;
+				float d = tex2Dproj(_CameraDepthTexture, UNITY_PROJ_COORD(i.screen)).x;
 
-				if (d < (z - EPSILON))
+				if ((z - d) > EPSILON)
 				{
 					discard;
 				}

@@ -79,11 +79,11 @@
 
 			float4 frag(v2f_light i) : COLOR
 			{
-			#ifdef CUT_ON
-				clip(tex2D(_Cut, i.uv).r - _Params.w);
-			#endif
-
 				float4 params = saturate(_Params);
+
+			#ifdef CUT_ON
+				clip(tex2D(_Cut, i.uv).r - params.w);
+			#endif
 
 			#ifdef HEIGHT_ON
 				i.uv += ParallaxOffset(tex2D(_Height, i.uv), 0.05, i.viewDir);
@@ -145,21 +145,21 @@
 
 			float4 frag(v2f_uber i) : COLOR
 			{
-			#ifdef CUT_ON
-				clip(tex2D(_Cut, i.uv).r - _Params.w);
-			#endif
-
-				float4 light = Lighting(i);
 				float4 params = saturate(_Params);
 
-				float2 uv = i.uv.xy;
+			#ifdef CUT_ON
+				clip(tex2D(_Cut, i.uv.xy).r - params.w);
+			#endif
+
+				float fade = Fade(i);
+				float4 light = Lighting(i, fade);
 
 			#ifdef HEIGHT_ON
-				uv += ParallaxOffset(tex2D(_Height, uv).x, 0.05, i.viewDir);
+				i.uv.xy += ParallaxOffset(tex2D(_Height, i.uv.xy).x, 0.05, i.viewDir);
 			#endif
 
 			#ifdef ALBEDO_ON
-				float3 albedo = tex2D(_Albedo, uv).rgb * _Color;
+				float3 albedo = tex2D(_Albedo, i.uv.xy).rgb * _Color;
 			#else
 				float3 albedo = _Color;
 			#endif
@@ -170,43 +170,51 @@
 				}
 
 			#ifdef METALLIC_ON
-				float metallic = tex2D(_Metallic, uv).r * params.x;
+				float metallic = tex2D(_Metallic, i.uv.xy).r * params.x;
 			#else
 				float metallic = params.x;
 			#endif
 
 				float3 res = albedo * (1.0 - metallic);
 
-		#ifdef REFLECTIONS_ON
-				float4 n0 = tex2D(_Hack, uv);
-				float4 n1 = tex2D(_Normal, uv);
+			#ifdef REFLECTIONS_ON
+			#ifdef LIGHTMAP_ON
+				if (fade < 1.0) {
+			#endif
+
+				float4 n0 = tex2D(_Hack, i.uv.xy);
+				float4 n1 = tex2D(_Normal, i.uv.xy);
 
 				float3 normal = UnpackNormal(lerp(n0, n1, params.z));
 
 			#ifdef ROUGHNESS_ON
-				float a = tex2D(_Roughness, uv).r * params.y;
+				float a = tex2D(_Roughness, i.uv.xy).r * params.y;
 			#else
 				float a = params.y;
 			#endif
 
 				a = max(a, EPSILON);
 
-				float4 cube;
-
-				cube.xyz = BPCEM(i, normal);
-				cube.w = a * 8.0;
-
+				float4 cube = float4(BPCEM(i, normal), a * 8.0);
 				float3 env = HDRDecode(texCUBElod(_Box, cube));
 				float3 spec = lerp(0.03.xxx, albedo, metallic);
 
 				env *= F3(spec, a, dot(normalize(i.viewDir), normal));
 
 			#ifdef AO_ON
-				env *= (tex2D(_AO, uv).r * params.z) + (1.0 - params.z);
+				env *= (tex2D(_AO, i.uv.xy).r * params.z) + (1.0 - params.z);
+			#endif
+
+			#ifdef LIGHTMAP_ON
+				env *= 1.0 - fade;
 			#endif
 
 				res += env;
-		#endif
+
+			#ifdef LIGHTMAP_ON
+				}
+			#endif
+			#endif
 
 				res *= light.rgb;
 				res += light.a;
@@ -233,7 +241,7 @@
 			float4 frag(v2f_shadow i) : COLOR
 			{
 			#ifdef CUT_ON
-				clip(tex2D(_Cut, i.uv).r - _Params.w);
+				clip(tex2D(_Cut, i.uv).r - saturate(_Params.w));
 			#endif
 
 				return EncodeFloatRGBA(min(length(i.vec) * _LightPositionRange.w, 1.0 - EPSILON));
