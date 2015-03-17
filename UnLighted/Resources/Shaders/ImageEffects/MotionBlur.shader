@@ -1,4 +1,4 @@
-﻿Shader "Hidden/UnLighted/MotionBlur"
+﻿Shader "Hidden/UnLighted-ImageEffects-MotionBlur"
 {
 	Properties
 	{
@@ -45,7 +45,7 @@
 
 			float4 frag(v2f_img i) : COLOR
 			{
-				float d = tex2D(_CameraDepthTexture, i.uv).x;
+				float d = SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, i.uv);
 
 				float4 pos = float4((i.uv * 2.0) - 1.0, d, 1.0);
 				float4 prv = mul(_Proj, pos);
@@ -130,7 +130,7 @@
 			float4 frag(v2f i) : COLOR
 			{
 				float z = ((i.screen.z / i.screen.w) * 0.5) + 0.5;
-				float d = tex2Dproj(_CameraDepthTexture, UNITY_PROJ_COORD(i.screen)).x;
+				float d = SAMPLE_DEPTH_TEXTURE_PROJ(_CameraDepthTexture, UNITY_PROJ_COORD(i.screen));
 
 				if ((z - d) > EPSILON)
 				{

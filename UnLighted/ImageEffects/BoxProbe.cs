@@ -24,18 +24,8 @@ namespace UnLighted.ImageEffects
 		private Texture2D tex;
 		private int i;
 
-		public override string Name
+		private void Awake()
 		{
-			get
-			{
-				return "Hidden/UnLighted/BoxProbe";
-			}
-		}
-
-		public override void Awake()
-		{
-			base.Awake();
-
 			this.camera.aspect = 1;
 			this.camera.fieldOfView = 90;
 			this.camera.nearClipPlane = 0.1f;

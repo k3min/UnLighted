@@ -17,28 +17,11 @@ namespace UnLighted.ImageEffects
 		public bool Debug;
 
 		private RenderTexture motion;
-
 		private List<MotionBlurObject> objects = new List<MotionBlurObject>();
 
-		public override string Name
+		private void Awake()
 		{
-			get
-			{
-				return "Hidden/UnLighted/MotionBlur";
-			}
-		}
-
-		public override DepthTextureMode Depth
-		{
-			get
-			{
-				return DepthTextureMode.Depth;
-			}
-		}
-
-		public override void Awake()
-		{
-			base.Awake();
+			this.camera.depthTextureMode |= DepthTextureMode.Depth;
 
 			var w = Screen.width >> ImageEffectBase.Level(this.Downsample);
 			var h = Screen.height >> ImageEffectBase.Level(this.Downsample);

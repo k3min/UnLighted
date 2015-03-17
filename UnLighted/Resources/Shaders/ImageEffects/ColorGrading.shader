@@ -1,4 +1,4 @@
-﻿Shader "Hidden/UnLighted/ColorGrading"
+﻿Shader "Hidden/UnLighted-ImageEffects-ColorGrading"
 {
 	Properties
 	{

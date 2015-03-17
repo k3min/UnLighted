@@ -10,14 +10,6 @@ namespace UnLighted.ImageEffects
 		public float Dispersion = 0.01f;
 		public Vector3 ETA = new Vector3(0.9f, 0.6f, 0.3f);
 
-		public override string Name
-		{
-			get
-			{
-				return "Hidden/UnLighted/Lens";
-			}
-		}
-
 		public override void OnRenderImage(RenderTexture a, RenderTexture b)
 		{
 			this.Material.SetVector("_ETA", this.ETA * this.Dispersion);

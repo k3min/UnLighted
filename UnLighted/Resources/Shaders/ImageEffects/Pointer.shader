@@ -1,4 +1,4 @@
-﻿Shader "Hidden/UnLighted/Pointer"
+﻿Shader "Hidden/UnLighted-ImageEffects-Pointer"
 {
 	Properties
 	{

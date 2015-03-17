@@ -1,4 +1,4 @@
-﻿Shader "Hidden/UnLighted/BoxProbe"
+﻿Shader "Hidden/UnLighted-ImageEffects-BoxProbe"
 {
 	Properties
 	{

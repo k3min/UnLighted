@@ -75,18 +75,12 @@ v2f_shadow vert_shadow(appdata_full v)
 	return o;
 }
 
-float Fade(v2f_uber i)
+float Fade(float fade)
 {
-#ifdef LIGHTMAP_ON
-	float fade = length(i.multi);
-
 	fade *= unity_LightmapFade.z;
 	fade += unity_LightmapFade.w;
 
 	return saturate(fade);
-#endif
-
-	return 0.0;
 }
 
 float3 BPCEM(v2f_uber i, float3 n)

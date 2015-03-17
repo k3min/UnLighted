@@ -1,4 +1,4 @@
-﻿Shader "Hidden/UnLighted/Bloom"
+﻿Shader "Hidden/UnLighted-ImageEffects-Bloom"
 {
 	Properties
 	{

@@ -59,7 +59,7 @@
 			{
 				i.ray *= _ProjectionParams.z / i.ray.z;
 
-				float depth = Linear01Depth(tex2Dproj(_CameraDepthTexture, UNITY_PROJ_COORD(i.uv)).x);
+				float depth = Linear01Depth(SAMPLE_DEPTH_TEXTURE_PROJ(_CameraDepthTexture, UNITY_PROJ_COORD(i.uv)));
 
 				float4 viewPos = float4(i.ray * depth, 1.0);
 				float3 worldPos = mul(_CameraToWorld, viewPos).xyz;
@@ -67,10 +67,9 @@
 				float fade = distance(worldPos, unity_ShadowFadeCenterAndType.xyz);
 
 				fade = lerp(viewPos.z, fade, unity_ShadowFadeCenterAndType.w);
+				fade = Fade(fade);
 
-				float lightMap = (fade * unity_LightmapFade.z) + unity_LightmapFade.w;
-
-				if (lightMap >= 1.0)
+				if (fade >= (1.0 - EPSILON))
 				{
 					discard;
 				}
@@ -94,7 +93,7 @@
 				float4 res = CalculateLight(normal, metallic, a, _LightColor.rgb, lightDir, viewDir);
 
 				res *= saturate(atten);
-				res *= saturate(1.0 - lightMap);
+				res *= saturate(1.0 - fade);
 
 				return res;
 			}

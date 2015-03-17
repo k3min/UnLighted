@@ -5,32 +5,35 @@ namespace UnLighted.ImageEffects
 	[RequireComponent(typeof(Camera))]
 	public abstract class ImageEffectBase : MonoBehaviour
 	{
-		public Material Material
-		{
-			get;
-			set;
-		}
+		private Material material;
 
 		public virtual string Name
 		{
 			get
 			{
-				throw new System.ArgumentException();
+				return "Hidden/" + this.GetType().FullName.Replace(".", "-");
 			}
 		}
 
-		public virtual DepthTextureMode Depth
+		public Shader Shader
 		{
 			get
 			{
-				return DepthTextureMode.None;
+				return Shader.Find(this.Name);
 			}
 		}
 
-		public virtual void Awake()
+		public Material Material
 		{
-			this.camera.depthTextureMode |= this.Depth;
-			this.Material = new Material(Shader.Find(this.Name));
+			get
+			{
+				if (this.material == null)
+				{
+					this.material = new Material(this.Shader);
+				}
+
+				return this.material;
+			}
 		}
 
 		public virtual void OnRenderImage(RenderTexture a, RenderTexture b)

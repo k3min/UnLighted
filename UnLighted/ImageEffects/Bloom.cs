@@ -10,14 +10,6 @@ namespace UnLighted.ImageEffects
 		public float BlurSize = 4;
 		public float Intensity = 0.2f;
 
-		public override string Name
-		{
-			get
-			{
-				return "Hidden/UnLighted/Bloom";
-			}
-		}
-
 		public override void OnRenderImage(RenderTexture a, RenderTexture b)
 		{
 			var w = a.width >> ImageEffectBase.Level(this.Downsample);

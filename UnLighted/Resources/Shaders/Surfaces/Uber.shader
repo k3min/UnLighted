@@ -151,7 +151,12 @@
 				clip(tex2D(_Cut, i.uv.xy).r - params.w);
 			#endif
 
-				float fade = Fade(i);
+			#ifdef LIGHTMAP_ON
+				float fade = Fade(length(i.multi));
+			#else
+				float fade = 0.0;
+			#endif
+
 				float4 light = Lighting(i, fade);
 
 			#ifdef HEIGHT_ON

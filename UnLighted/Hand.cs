@@ -51,7 +51,7 @@ namespace UnLighted
 
 		private void Awake()
 		{
-			this.material = new Material(Shader.Find("Hidden/UnLighted/Pointer"));
+			this.material = new Material(Shader.Find("Hidden/UnLighted-ImageEffects-Pointer"));
 		}
 
 		private void Update()

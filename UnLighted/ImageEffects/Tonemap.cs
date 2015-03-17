@@ -15,18 +15,8 @@ namespace UnLighted.ImageEffects
 		[HideInInspector]
 		public bool Debug;
 
-		public override string Name
+		private void Awake()
 		{
-			get
-			{
-				return "Hidden/UnLighted/Tonemap";
-			}
-		}
-
-		public override void Awake()
-		{
-			base.Awake();
-
 			this.lum = new RenderTexture(1 << this.MipLevel, 1 << this.MipLevel, 0, RenderTextureFormat.ARGBHalf)
 			{
 				useMipMap = true

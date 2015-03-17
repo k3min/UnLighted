@@ -18,18 +18,14 @@ namespace UnLightedEd.ImageEffects
 		{
 			this.DefaultInspector();
 
+			this.serializedObject.Update();
+
 			if (this.debugP != null)
 			{
-				this.serializedObject.Update();
-
 				this.debugP.boolValue = GUILayout.Toggle(this.debugP.boolValue, "Debug", EditorStyles.miniButton);
-
-				this.serializedObject.ApplyModifiedProperties();
 			}
 
-			var depth = (this.target as ImageEffectBase).Depth;
-
-			Util.Hint(depth == DepthTextureMode.None, "DepthTextureMode: " + depth, MessageType.Info);
+			this.serializedObject.ApplyModifiedProperties();
 		}
 	}
 }

@@ -1,4 +1,4 @@
-﻿Shader "Hidden/UnLighted/Tonemap"
+﻿Shader "Hidden/UnLighted-ImageEffects-Tonemap"
 {
 	Properties
 	{

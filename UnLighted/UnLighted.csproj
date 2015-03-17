@@ -84,9 +84,6 @@
     <None Include="Resources\Shaders\Internal\PrePassLighting.shader">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Resources\Texture\Random.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="Resources\Shaders\ImageEffects\BoxProbe.shader">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

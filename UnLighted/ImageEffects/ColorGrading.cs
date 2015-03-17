@@ -9,15 +9,7 @@ namespace UnLighted.ImageEffects
 
 		public Texture2D LUT;
 
-		public override string Name
-		{
-			get
-			{
-				return "Hidden/UnLighted/ColorGrading";
-			}
-		}
-
-		public override void Awake()
+		private void Awake()
 		{
 			if (this.LUT == null)
 			{
@@ -41,8 +33,6 @@ namespace UnLighted.ImageEffects
 			this.lut = new Texture3D(16, 16, 16, TextureFormat.ARGB32, false);
 			this.lut.SetPixels(c3D);
 			this.lut.Apply();
-
-			base.Awake();
 		}
 
 		public override void OnRenderImage(RenderTexture a, RenderTexture b)

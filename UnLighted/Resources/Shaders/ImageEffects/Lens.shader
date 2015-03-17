@@ -1,4 +1,4 @@
-﻿Shader "Hidden/UnLighted/Lens"
+﻿Shader "Hidden/UnLighted-ImageEffects-Lens"
 {
 	Properties
 	{
