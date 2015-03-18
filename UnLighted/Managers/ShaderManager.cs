@@ -10,12 +10,6 @@ namespace UnLighted.Managers
 				new ShaderProperty
 				{
 					Type = ShaderPropertyType.Keyword,
-					Key = "REFRACTIONS",
-					Enabled = true
-				},
-				new ShaderProperty
-				{
-					Type = ShaderPropertyType.Keyword,
 					Key = "REFLECTIONS",
 					Enabled = true
 				},

@@ -1,6 +1,8 @@
 UnLighted
 =========
 
+![image](http://i.imgur.com/n7hSTKi.gif)
+
 More info soon.
 For now, UnLighted expects:
 

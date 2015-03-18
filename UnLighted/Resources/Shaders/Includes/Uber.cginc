@@ -40,8 +40,7 @@ v2f_uber vert_uber(appdata_full v)
 
 	o.viewDir = mul(rotation, viewDir);
 
-#ifndef UNITY_PASS_FORWARDBASE
-#ifndef LIGHTMAP_OFF
+#ifdef LIGHTMAP_ON
 	o.uv.zw = v.texcoord1.xy * unity_LightmapST.xy;
 	o.uv.zw += unity_LightmapST.zw;
 
@@ -56,9 +55,6 @@ v2f_uber vert_uber(appdata_full v)
 	float3 worldNorm = mul((float3x3)_Object2World, v.normal);
 
 	o.multi.rgb = ShadeSH9(float4(worldNorm, 1.0));
-#endif
-#else
-	o.multi.xyz = mul(rotation, ObjSpaceLightDir(v.vertex));
 #endif
 
 	return o;

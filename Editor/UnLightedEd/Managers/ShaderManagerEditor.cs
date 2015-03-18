@@ -83,19 +83,23 @@ namespace UnLightedEd.Managers
 
 		private static float VectorField(SerializedProperty property, float value)
 		{
-			var width = EditorGUIUtility.labelWidth;
+			var label = EditorGUIUtility.labelWidth;
 
-			EditorGUILayout.BeginHorizontal();
-			{
-				property.stringValue = GUILayout.TextField(property.stringValue, Util.RichLabel, GUILayout.Width(width));
+			var rect = EditorGUILayout.GetControlRect(true, 16);
+			var width = rect.width;
 
-				EditorGUIUtility.labelWidth = 13;
+			rect.width = label - 1;
 
-				value = EditorGUILayout.FloatField(property.name, value);
+			property.stringValue = GUI.TextField(rect, property.stringValue, Util.RichLabel);
 
-				EditorGUIUtility.labelWidth = width;
-			}
-			EditorGUILayout.EndHorizontal();
+			rect.width = width;
+			rect.xMin += label - 1;
+
+			EditorGUIUtility.labelWidth = 13;
+
+			value = EditorGUI.FloatField(rect, property.name, value);
+
+			EditorGUIUtility.labelWidth = label;
 
 			return value;
 		}

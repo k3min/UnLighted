@@ -9,7 +9,7 @@ namespace UnLightedEd.ImageEffects
 	{
 		private SerializedProperty debugP;
 
-		private void Awake()
+		private void OnEnable()
 		{
 			this.debugP = this.serializedObject.FindProperty("Debug");
 		}

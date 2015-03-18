@@ -6,7 +6,7 @@ namespace UnLightedEd
 {
 	internal static class Util
 	{
-		private static Dictionary<TextAnchor, GUIStyle> label = new Dictionary<TextAnchor, GUIStyle>();
+		private static readonly Dictionary<TextAnchor, GUIStyle> label = new Dictionary<TextAnchor, GUIStyle>();
 		private static GUIStyle richLabel;
 
 		public static GUIStyle AlignedLabel(TextAnchor a)

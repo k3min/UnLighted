@@ -9,19 +9,26 @@ namespace UnLighted.Controllers
 		private Vector2 rotation;
 		private Vector3 rotationV;
 
+		[HideInInspector]
+		public float Min = -90;
+
+		[HideInInspector]
+		public float Max = 90;
+
 		public float Sensitivity = 5;
 		public float Smoothing = 0.04f;
 		public float Tilt = -0.005f;
+		public bool CursorNeedsLock = true;
 
 		private void Update()
 		{
-			if (Screen.lockCursor)
+			if (!this.CursorNeedsLock || Screen.lockCursor)
 			{
 				this.input.x += Input.GetAxis("Mouse X") * this.Sensitivity;
 				this.input.y -= Input.GetAxis("Mouse Y") * this.Sensitivity;
 			}
 
-			this.input.y = Mathf.Clamp(this.input.y, -90, 90);
+			this.input.y = Mathf.Clamp(this.input.y, this.Min, this.Max);
 			this.rotation = Vector3.SmoothDamp(this.rotation, this.input, ref this.rotationV, this.Smoothing);
 
 			var zero = Vector3.zero;

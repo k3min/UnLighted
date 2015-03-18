@@ -53,6 +53,7 @@
     <Compile Include="ImageEffects\ImageEffectBaseEditor.cs" />
     <Compile Include="Managers\GameManagerEditor.cs" />
     <Compile Include="GameStateEditor.cs" />
+    <Compile Include="Controllers\CameraControllerEditor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Box\Bake.bat">
@@ -71,5 +72,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ImageEffects\" />
+    <Folder Include="Controllers\" />
   </ItemGroup>
 </Project>
