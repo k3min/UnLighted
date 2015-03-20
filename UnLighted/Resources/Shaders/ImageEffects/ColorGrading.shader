@@ -31,7 +31,7 @@
 				float4 color = tex2D(_MainTex, i.uv);
 
 				color.rgb = sqrt(color.rgb);
-				color.rgb = tex3D(_LUT, color.rgb * _Scale + _Offset).rgb;
+				color.rgb = tex3D(_LUT, (color.rgb * _Scale) + _Offset).rgb;
 				color.rgb *= color.rgb;
 
 				return color;

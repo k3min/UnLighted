@@ -1,17 +1,41 @@
 ﻿#ifndef UTIL_INCLUDED
 #define UTIL_INCLUDED
 
-float4 HDREncode(float3 col)
+inline float LightmapFade(float fade)
+{
+	fade *= unity_LightmapFade.z;
+	fade += unity_LightmapFade.w;
+
+	return saturate(fade);
+}
+
+inline float3 BPCEM(v2f_uber i, float3 n)
+{
+	float3 a = float3(i.twX.w, i.twY.w, i.twZ.w);
+	float3 b = float3(dot(i.twX.xyz, n), dot(i.twY.xyz, n), dot(i.twZ.xyz, n));
+
+	float3 r = reflect(a, b);
+	float3 start = _BoxPos - (_BoxSize * 0.5);
+
+	float3 A = (start + _BoxSize - i.worldPos) / r;
+	float3 B = (start - i.worldPos) / r;
+	float3 plane = (r > 0) ? A : B;
+
+	return i.worldPos + (r * min(min(plane.x, plane.y), plane.z)) - _BoxPos;
+}
+
+inline float4 HDREncode(float3 col)
 {
 	return float4(col, 1.0) / max(max(1.0, col.r), max(col.g, col.b));
 }
 
-float3 HDRDecode(float4 col)
+inline float3 HDRDecode(float4 col)
 {
 	return col.rgb / col.a;
 }
 
-float2 EncodeNormal(float3 n)
+// http://khayyam.kaplinski.com/2011/07/encoding-normals-for-gbuffer.html
+inline float2 EncodeNormal(float3 n)
 {
 	float2 p = n.xy / (abs(n.z) + 1.0);
 
@@ -27,7 +51,12 @@ float2 EncodeNormal(float3 n)
 	return q * 0.5 + 0.5;
 }
 
-float3 DecodeNormal(float2 enc)
+inline float2 EncodeNormal(float x, float y, float z)
+{
+	return EncodeNormal(float3(x, y, z));
+}
+
+inline float3 DecodeNormal(float2 enc)
 {
 	float2 p = enc * 2.0 - 1.0;
 

@@ -11,7 +11,7 @@
 		_AO("AO", 2D) = "white" {}
 		_Height("Height", 2D) = "white" {}
 		_Cut("Cut", 2D) = "white" {}
-		_Params("Metallic, Roughness, Bumpiness, Cut", Vector) = (1, 1, 1, 1)
+		_Params("Metallic, Roughness, Bumpiness, Cut", Vector) = (1, 1, 1, 0)
 		[HideInInspector]
 		_Hack("", 2D) = "bump" {}
 	}
@@ -89,42 +89,30 @@
 				i.uv += ParallaxOffset(tex2D(_Height, i.uv), 0.05, i.viewDir);
 			#endif
 
+				Surface s;
+
+				s.Albedo = _Color;
+				s.Metallic = params.x;
+				s.Roughness = params.y;
+
+			#ifdef ALBEDO_ON
+				s.Albedo *= tex2D(_Albedo, i.uv).rgb;
+			#endif
+
 				float4 n0 = tex2D(_Hack, i.uv);
 				float4 n1 = tex2D(_Normal, i.uv);
 
-				float3 normal = UnpackNormal(lerp(n0, n1, params.z));
-
-				float3 worldNorm;
-
-				worldNorm.x = dot(i.TtoW0, normal);
-				worldNorm.y = dot(i.TtoW1, normal);
-				worldNorm.z = dot(i.TtoW2, normal);
-
-			#ifdef ALBEDO_ON
-				float3 albedo = tex2D(_Albedo, i.uv).rgb * _Color;
-			#else
-				float3 albedo = _Color;
-			#endif
+				s.Normal = UnpackNormal(lerp(n0, n1, params.z));
 
 			#ifdef METALLIC_ON
-				float metallic = tex2D(_Metallic, i.uv).r * params.x;
-			#else
-				float metallic = params.x;
+				s.Metallic *= tex2D(_Metallic, i.uv).r;
 			#endif
 
 			#ifdef ROUGHNESS_ON
-				float a = tex2D(_Roughness, i.uv).r * params.y;
-			#else
-				float a = params.y;
+				s.Roughness *= tex2D(_Roughness, i.uv).r;
 			#endif
 
-				float4 res;
-
-				res.rg = EncodeNormal(worldNorm);
-				res.b = max(a, EPSILON);
-				res.a = lerp(0.03, Luminance(albedo), metallic);
-
-				return res;
+				return PrePassBase(i, s);
 			}
 
 			ENDCG
@@ -151,80 +139,49 @@
 				clip(tex2D(_Cut, i.uv.xy).r - params.w);
 			#endif
 
-			#ifdef LIGHTMAP_ON
-				float fade = Fade(length(i.multi));
-			#else
-				float fade = 0.0;
-			#endif
-
-				float4 light = Lighting(i, fade);
-
 			#ifdef HEIGHT_ON
-				i.uv.xy += ParallaxOffset(tex2D(_Height, i.uv.xy).x, 0.05, i.viewDir);
+				i.uv.xy += ParallaxOffset(tex2D(_Height, i.uv.xy).r, 0.05, i.viewDir);
 			#endif
+
+				Surface s;
+
+				s.Albedo = _Color;
+				s.Metallic = params.x;
+				s.Roughness = params.y;
 
 			#ifdef ALBEDO_ON
-				float3 albedo = tex2D(_Albedo, i.uv.xy).rgb * _Color;
-			#else
-				float3 albedo = _Color;
+				s.Albedo *= tex2D(_Albedo, i.uv.xy).rgb;
 			#endif
 
-				if (i.color.r > 0 && i.color.g == 0 && i.color.b == 0)
+				if (i.color.r >  EPSILON &&
+					i.color.g <= EPSILON &&
+					i.color.b <= EPSILON)
 				{
-					albedo *= _Alt;
+					s.Albedo *= _Alt;
 				}
 
-			#ifdef METALLIC_ON
-				float metallic = tex2D(_Metallic, i.uv.xy).r * params.x;
-			#else
-				float metallic = params.x;
-			#endif
-
-				float3 res = albedo * (1.0 - metallic);
-
 			#ifdef REFLECTIONS_ON
-			#ifdef LIGHTMAP_ON
-				if (fade < 1.0) {
-			#endif
-
 				float4 n0 = tex2D(_Hack, i.uv.xy);
 				float4 n1 = tex2D(_Normal, i.uv.xy);
 
-				float3 normal = UnpackNormal(lerp(n0, n1, params.z));
+				s.Normal = UnpackNormal(lerp(n0, n1, params.z));
 
 			#ifdef ROUGHNESS_ON
-				float a = tex2D(_Roughness, i.uv.xy).r * params.y;
-			#else
-				float a = params.y;
+				s.Roughness *= tex2D(_Roughness, i.uv.xy).r;
+			#endif
 			#endif
 
-				a = max(a, EPSILON);
-
-				float4 cube = float4(BPCEM(i, normal), a * 8.0);
-				float3 env = HDRDecode(texCUBElod(_Box, cube));
-				float3 spec = lerp(0.03.xxx, albedo, metallic);
-
-				env *= F3(spec, a, dot(normalize(i.viewDir), normal));
+			#ifdef METALLIC_ON
+				s.Metallic *= tex2D(_Metallic, i.uv.xy).r;
+			#endif
 
 			#ifdef AO_ON
-				env *= (tex2D(_AO, i.uv.xy).r * params.z) + (1.0 - params.z);
+				s.AO = (tex2D(_AO, i.uv.xy).r * params.z) + (1.0 - params.z);
+			#else
+				s.AO = 1.0;
 			#endif
 
-			#ifdef LIGHTMAP_ON
-				env *= 1.0 - fade;
-			#endif
-
-				res += env;
-
-			#ifdef LIGHTMAP_ON
-				}
-			#endif
-			#endif
-
-				res *= light.rgb;
-				res += light.a;
-
-				return float4(res, 1.0);
+				return float4(PrePassFinal(i, s), 1.0);
 			}
 
 			ENDCG

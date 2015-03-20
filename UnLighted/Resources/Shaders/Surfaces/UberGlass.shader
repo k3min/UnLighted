@@ -42,6 +42,7 @@
 		sampler2D _Roughness;
 		sampler2D _Hack;
 		sampler2D _GrabTexture;
+		float4 _GrabTexture_TexelSize;
 
 		ENDCG
 

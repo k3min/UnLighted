@@ -29,12 +29,20 @@ samplerCUBE _Box;
 float3 _BoxPos;
 float3 _BoxSize;
 
+struct Surface {
+	float3 Albedo;
+	float3 Normal;
+	float Metallic;
+	float Roughness;
+	float AO;
+};
+
 struct v2f_light {
 	float4 pos : POSITION;
 	float2 uv : TEXCOORD0;
-	float3 TtoW0 : TEXCOORD1;
-	float3 TtoW1 : TEXCOORD2;
-	float3 TtoW2 : TEXCOORD3;
+	float3 twX : TEXCOORD1;
+	float3 twY : TEXCOORD2;
+	float3 twZ : TEXCOORD3;
 	float3 viewDir : TEXCOORD4;
 };
 
@@ -43,9 +51,9 @@ struct v2f_uber {
 	float4 color : COLOR;
 	float4 uv : TEXCOORD0;
 	float4 screen : TEXCOORD1;
-	float4 TtoW0 : TEXCOORD2;
-	float4 TtoW1 : TEXCOORD3;
-	float4 TtoW2 : TEXCOORD4;
+	float4 twX : TEXCOORD2;
+	float4 twY : TEXCOORD3;
+	float4 twZ : TEXCOORD4;
 	float3 viewDir : TEXCOORD5;
 	float3 worldPos : TEXCOORD6;
 	float4 multi : TEXCOORD7;

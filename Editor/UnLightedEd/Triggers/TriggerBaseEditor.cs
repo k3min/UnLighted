@@ -45,7 +45,7 @@ namespace UnLightedEd.Triggers
 					{
 						var behaviour = behaviourP.objectReferenceValue as Behaviour;
 						var index = Mathf.Max(behaviours.ToList().IndexOf(behaviour), 0);
-						var strings = behaviours.Select(x => x.GetType().ToString()).ToArray();
+						var strings = behaviours.Select(x => x.GetType().FullName).ToArray();
 
 						behaviourP.objectReferenceValue = behaviours[EditorGUILayout.Popup(index, strings)];
 

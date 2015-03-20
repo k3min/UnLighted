@@ -29,6 +29,7 @@ namespace UnLighted.Controllers
 		private bool jump;
 		private bool grounded;
 		private float speed;
+		private bool sprint;
 
 		private Vector3 previousPosition;
 		private Vector3 velocity;
@@ -56,9 +57,8 @@ namespace UnLighted.Controllers
 			if (this.canWalk)
 			{
 				var move = this.Movement;
-				var cond = (move.Speed > float.Epsilon && Input.GetButton("Sprint"));
 
-				this.speed = Mathf.Lerp(this.speed, cond ? move.Sprint : move.Speed, Time.fixedDeltaTime * 2f);
+				this.speed = Mathf.Lerp(this.speed, this.sprint ? move.Sprint : move.Speed, Time.fixedDeltaTime * 2f);
 
 				this.rigidbody.MovePosition(this.rigidbody.position + (this.direction * this.speed * Time.fixedDeltaTime));
 			}
@@ -142,6 +142,7 @@ namespace UnLighted.Controllers
 			this.direction = fwd * this.direction;
 
 			this.jump |= Input.GetButtonDown("Jump");
+			this.sprint = (this.Movement.Sprint > float.Epsilon && Input.GetButton("Sprint"));
 		}
 	}
 

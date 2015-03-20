@@ -67,7 +67,7 @@
 				float fade = distance(worldPos, unity_ShadowFadeCenterAndType.xyz);
 
 				fade = lerp(viewPos.z, fade, unity_ShadowFadeCenterAndType.w);
-				fade = Fade(fade);
+				fade = LightmapFade(fade);
 
 				if (fade >= (1.0 - EPSILON))
 				{

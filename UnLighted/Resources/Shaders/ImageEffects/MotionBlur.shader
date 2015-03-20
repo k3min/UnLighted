@@ -21,7 +21,7 @@
 
 		float4x4 _Proj;
 
-		float2 EncodeMotion(float4 cur, float4 prv)
+		inline float2 EncodeMotion(float4 cur, float4 prv)
 		{
 			float2 a = cur.xy / cur.w;
 			float2 b = prv.xy / prv.w;
@@ -29,7 +29,7 @@
 			return a - b;
 		}
 
-		float2 DecodeMotion(float2 motion)
+		inline float2 DecodeMotion(float2 motion)
 		{
 			return motion;
 		}

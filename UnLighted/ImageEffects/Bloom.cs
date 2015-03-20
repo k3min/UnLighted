@@ -6,9 +6,14 @@ namespace UnLighted.ImageEffects
 	public class Bloom : ImageEffectBase
 	{
 		public int Downsample = 1;
-		public int Iterations = 4;
-		public float BlurSize = 4;
+		public float Threshold = 1;
 		public float Intensity = 0.2f;
+
+		public BloomBlur Blur = new BloomBlur
+		{
+			Iterations = 4,
+			Size = Vector2.one
+		};
 
 		public override void OnRenderImage(RenderTexture a, RenderTexture b)
 		{
@@ -17,29 +22,38 @@ namespace UnLighted.ImageEffects
 
 			var rt = RenderTexture.GetTemporary(w, h, 0, RenderTextureFormat.ARGBHalf);
 
-			Graphics.Blit(a, rt);
+			this.Material.SetVector("_Params", new Vector2(this.Threshold, 0));
 
-			for (var j = 0; j < this.Iterations; j++)
+			Graphics.Blit(a, rt, this.Material, 2);
+
+			for (var j = 0; j < this.Blur.Iterations; j++)
 			{
 				var rt2 = RenderTexture.GetTemporary(w, h, 0, RenderTextureFormat.ARGBHalf);
-				this.Material.SetVector("_BlurSize", new Vector2(0, this.BlurSize + j));
+				this.Material.SetVector("_Params", new Vector2(0, this.Blur.Size.y + j));
 				Graphics.Blit(rt, rt2, this.Material, 1);
 				RenderTexture.ReleaseTemporary(rt);
 				rt = rt2;
 
 				rt2 = RenderTexture.GetTemporary(w, h, 0, RenderTextureFormat.ARGBHalf);
-				this.Material.SetVector("_BlurSize", new Vector2(this.BlurSize + j, 0));
+				this.Material.SetVector("_Params", new Vector2(this.Blur.Size.x + j, 0));
 				Graphics.Blit(rt, rt2, this.Material, 1);
 				RenderTexture.ReleaseTemporary(rt);
 				rt = rt2;
 			}
 
 			this.Material.SetTexture("_Bloom", rt);
-			this.Material.SetFloat("_Intensity", this.Intensity);
+			this.Material.SetVector("_Params", new Vector2(this.Intensity, 0));
 
 			Graphics.Blit(a, b, this.Material, 0);
 
 			RenderTexture.ReleaseTemporary(rt);
 		}
+	}
+
+	[System.Serializable]
+	public struct BloomBlur
+	{
+		public int Iterations;
+		public Vector2 Size;
 	}
 }

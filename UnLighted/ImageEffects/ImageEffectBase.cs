@@ -15,21 +15,13 @@ namespace UnLighted.ImageEffects
 			}
 		}
 
-		public Shader Shader
-		{
-			get
-			{
-				return Shader.Find(this.Name);
-			}
-		}
-
 		public Material Material
 		{
 			get
 			{
 				if (this.material == null)
 				{
-					this.material = new Material(this.Shader);
+					this.material = new Material(Shader.Find(this.Name));
 				}
 
 				return this.material;

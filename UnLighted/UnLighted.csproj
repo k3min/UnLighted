@@ -58,6 +58,7 @@
     <Compile Include="Platform.cs" />
     <Compile Include="Hand.cs" />
     <Compile Include="GameState.cs" />
+    <Compile Include="ImageEffects\Visualize.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\ImageEffects\Tonemap.shader">
@@ -97,6 +98,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Resources\Shaders\ImageEffects\Pointer.shader">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\Shaders\ImageEffects\Visualize.shader">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

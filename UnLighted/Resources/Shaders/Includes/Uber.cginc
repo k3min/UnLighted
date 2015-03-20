@@ -10,9 +10,9 @@ v2f_light vert_light(appdata_full v)
 
 	TANGENT_SPACE_ROTATION;
 
-	o.TtoW0 = mul(rotation, _Object2World[0].xyz);
-	o.TtoW1 = mul(rotation, _Object2World[1].xyz);
-	o.TtoW2 = mul(rotation, _Object2World[2].xyz);
+	o.twX = mul(rotation, _Object2World[0].xyz);
+	o.twY = mul(rotation, _Object2World[1].xyz);
+	o.twZ = mul(rotation, _Object2World[2].xyz);
 
 	o.viewDir = mul(rotation, ObjSpaceViewDir(v.vertex));
 
@@ -34,9 +34,9 @@ v2f_uber vert_uber(appdata_full v)
 
 	TANGENT_SPACE_ROTATION;
 
-	o.TtoW0 = float4(mul(rotation, _Object2World[0].xyz), worldRefl.x);
-	o.TtoW1 = float4(mul(rotation, _Object2World[1].xyz), worldRefl.y);
-	o.TtoW2 = float4(mul(rotation, _Object2World[2].xyz), worldRefl.z);
+	o.twX = float4(mul(rotation, _Object2World[0].xyz), worldRefl.x);
+	o.twY = float4(mul(rotation, _Object2World[1].xyz), worldRefl.y);
+	o.twZ = float4(mul(rotation, _Object2World[2].xyz), worldRefl.z);
 
 	o.viewDir = mul(rotation, viewDir);
 
@@ -71,53 +71,9 @@ v2f_shadow vert_shadow(appdata_full v)
 	return o;
 }
 
-float Fade(float fade)
+inline float D(float a, float NdH)
 {
-	fade *= unity_LightmapFade.z;
-	fade += unity_LightmapFade.w;
-
-	return saturate(fade);
-}
-
-float3 BPCEM(v2f_uber i, float3 n)
-{
-	float3 a = float3(i.TtoW0.w, i.TtoW1.w, i.TtoW2.w);
-	float3 b = float3(dot(i.TtoW0.xyz, n), dot(i.TtoW1.xyz, n), dot(i.TtoW2.xyz, n));
-
-	float3 r = reflect(a, b);
-	float3 start = _BoxPos - (_BoxSize * 0.5);
-
-	float3 A = (start + _BoxSize - i.worldPos) / r;
-	float3 B = (start - i.worldPos) / r;
-	float3 plane = (r > 0) ? A : B;
-
-	return i.worldPos + (r * min(min(plane.x, plane.y), plane.z)) - _BoxPos;
-}
-
-float4 Lighting(v2f_uber i, float f)
-{
-	float4 lm = tex2Dproj(_LightBuffer, UNITY_PROJ_COORD(i.screen));
-
-#ifdef LIGHTMAP_ON
-	if (f > 0.0)
-	{
-		lm.rgb += DecodeLightmap(tex2D(unity_Lightmap, i.uv.zw)) * f;
-	}
-
-	if (f < 1.0)
-	{
-		lm.rgb += DecodeLightmap(tex2D(unity_LightmapInd, i.uv.zw)) * (1.0 - f);
-	}
-#else
-	lm.rgb += i.multi.rgb;
-#endif
-
-	return lm;
-}
-
-float D(float a, float NdH)
-{
-	float a2 = a*a;
+	float a2 = a * a;
 	float NdH2 = NdH * NdH;
 
 	float denominator = (NdH2 * (a2 - 1.0)) + 1.0;
@@ -128,7 +84,7 @@ float D(float a, float NdH)
 	return a2 / denominator;
 }
 
-float G(float a, float NdV, float NdL)
+inline float G(float a, float NdV, float NdL)
 {
 	float k = a * 0.5;
 	float GV = NdV / ((NdV * (1.0 - k)) + k);
@@ -137,24 +93,22 @@ float G(float a, float NdV, float NdL)
 	return GV * GL;
 }
 
-float F(float spec, float a, float VdH)
+inline float F(float spec, float a, float VdH)
 {
 	return spec + ((1.0 - spec) * pow(1.0 - saturate(VdH), _Fresnel));
-	//return spec + (max(1.0 - a, spec) - spec) * pow(1.0 - saturate(VdH), _Fresnel);
 }
 
-float3 F3(float3 spec, float a, float VdH)
+inline float3 F3(float3 spec, float a, float VdH)
 {
-	//return spec + (1.0 - spec) * pow(1.0 - saturate(VdH), _Fresnel);
 	return spec + ((max(spec, 1.0 - a) - spec) * pow(1.0 - saturate(VdH), _Fresnel));
 }
 
-float Specular(float spec, float a, float NdL, float NdV, float NdH, float VdH)
+inline float Specular(float spec, float a, float NdL, float NdV, float NdH, float VdH)
 {
-	return (D(a, NdH) * G(a, NdV, NdL) * F(spec, a, VdH)) / ((4.0 * NdL * NdV) + EPSILON);
+	return (D(a, NdH) * G(a, NdV, NdL) * F(spec, a, VdH)) / max(4.0 * NdL * NdV, EPSILON);
 }
 
-float4 CalculateLight(float3 normal, float spec, float a, float3 lightColor, float3 lightDir, float3 viewDir)
+inline float4 CalculateLight(float3 normal, float spec, float a, float3 lightColor, float3 lightDir, float3 viewDir)
 {
 	float3 h = normalize(viewDir + lightDir);
 	float NdL = saturate(dot(normal, lightDir));
@@ -170,7 +124,7 @@ float4 CalculateLight(float3 normal, float spec, float a, float3 lightColor, flo
 	return res;
 }
 
-float SampleShadowCube(float3 vec)
+inline float SampleShadowCube(float3 vec)
 {
 	float fade = length(vec) * _LightPositionRange.w * (1.0 - _Shadows.z);
 
@@ -201,6 +155,69 @@ float SampleShadowCube(float3 vec)
 #else
 	return DecodeFloatRGBA(texCUBE(_ShadowMapTexture, vec)) < fade ? _LightShadowData.r : 1.0;
 #endif
+}
+
+inline float4 PrePassBase(v2f_light i, Surface s)
+{
+	float4 res;
+
+	res.rg = EncodeNormal(dot(i.twX, s.Normal), dot(i.twY, s.Normal), dot(i.twZ, s.Normal));
+	res.b = max(s.Roughness, EPSILON);
+	res.a = lerp(0.03, Luminance(s.Albedo), s.Metallic);
+
+	return res;
+}
+
+inline float3 PrePassFinal(v2f_uber i, Surface s)
+{
+	float4 light = tex2Dproj(_LightBuffer, UNITY_PROJ_COORD(i.screen));
+
+#ifdef LIGHTMAP_ON
+	float fade = LightmapFade(length(i.multi));
+
+	if (fade > EPSILON)
+	{
+		light.rgb += DecodeLightmap(tex2D(unity_Lightmap, i.uv.zw)) * fade;
+	}
+
+	if (fade < (1.0 - EPSILON))
+	{
+		light.rgb += DecodeLightmap(tex2D(unity_LightmapInd, i.uv.zw)) * (1.0 - fade);
+	}
+#else
+	light.rgb += i.multi.rgb;
+#endif
+
+	float3 res = s.Albedo * (1.0 - s.Metallic);
+
+#ifdef REFLECTIONS_ON
+#ifdef LIGHTMAP_ON
+	if (fade < 1.0) {
+#endif
+
+	float a = max(s.Roughness, EPSILON);
+	float4 cube = float4(BPCEM(i, s.Normal), a * 8.0);
+	float3 env = HDRDecode(texCUBElod(_Box, cube));
+	float3 spec = lerp(0.03.xxx, s.Albedo, s.Metallic);
+
+	env *= F3(spec, a, dot(normalize(i.viewDir), s.Normal));
+	env *= s.AO;
+
+#ifdef LIGHTMAP_ON
+	env *= 1.0 - fade;
+#endif
+
+	res += env;
+
+#ifdef LIGHTMAP_ON
+	}
+#endif
+#endif
+
+	res *= light.rgb;
+	res += light.a;
+
+	return res;
 }
 
 #endif

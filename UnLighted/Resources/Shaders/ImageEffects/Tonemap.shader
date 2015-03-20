@@ -70,17 +70,17 @@
 			sampler2D _Adapted;
 			float _Exposure;
 
-			float log10(float x)
+			inline float log10(float x)
 			{
 				return log(x) / 2.30258509299404568401;
 			}
 
-			float Autokey(float lum)
+			inline float Autokey(float lum)
 			{
 				return 1.03 - (2.0 / (2.0 + log10(lum + 1.0)));
 			}
 
-			float4 Hejl(float4 color)
+			inline float4 Hejl(float4 color)
 			{
 				float4 x = max(color - 0.004, 0.0);
 

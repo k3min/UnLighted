@@ -27,7 +27,6 @@ namespace UnLighted.ImageEffects
 			var h = Screen.height >> ImageEffectBase.Level(this.Downsample);
 
 			this.motion = new RenderTexture(w, h, 0, RenderTextureFormat.RGHalf);
-			this.motion.Create();
 
 			foreach (var mr in Object.FindObjectsOfType<MeshRenderer>())
 			{
