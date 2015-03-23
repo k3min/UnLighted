@@ -12,12 +12,12 @@
 		CGINCLUDE
 
 		#include "UnityCG.cginc"
+		#include "./../Includes/Vars.cginc"
 
 		#pragma glsl
 		#pragma fragmentoption ARB_precision_hint_fastest
 		#pragma only_renderers d3d11 opengl
 
-		sampler2D _MainTex;
 		float _AdaptionRate;
 		int _Level;
 
@@ -89,7 +89,7 @@
 
 			float4 frag(v2f_img i) : COLOR
 			{
-				float vignette = 1.0 - (length(0.5 - i.uv) / 2.0);
+				float vignette = 1.0 - (length(0.5 - i.uv) * L);
 				float adapted = tex2D(_Adapted, 0.5.xx).r;
 				float exposure = _Exposure * Autokey(adapted) / adapted;
 

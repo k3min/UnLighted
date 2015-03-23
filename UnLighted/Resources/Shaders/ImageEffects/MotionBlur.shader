@@ -70,26 +70,25 @@
 
 			float4 frag(v2f_img i) : COLOR
 			{
-				float2 vel = DecodeMotion(tex2D(_MotionTex, i.uv).xy);
+				float2 vel = DecodeMotion(tex2D(_MotionTex, i.uv).xy) * _MotionScale;
 
-				vel *= _MotionScale;
-
-				int magnitude = round(length(vel * _MainTex_TexelSize.zw));
-				int samples = clamp(magnitude, 1, MAX_SAMPLES);
+				float magnitude = round(length(vel * _MainTex_TexelSize.zw));
+				float samples = clamp(magnitude, 1, MAX_SAMPLES);
 
 				float4 res = tex2D(_MainTex, i.uv);
 
-				for (int j = 1; j < samples; j++)
+				float idx;
+				float2 off;
+
+				for (int j = 1; j < (int)samples; j++)
 				{
-					float idx = j;
-					float smp = samples - 1.0;
+					idx = (float)j / samples;
+					off = vel * (idx - 0.5);
 
-					float2 uv = vel * ((idx / smp) - 0.5);
-
-					res.rgb += tex2D(_MainTex, i.uv + uv);
+					res.rgb += tex2D(_MainTex, i.uv + off);
 				}
 
-				res.rgb /= float(samples);
+				res.rgb /= samples;
 
 				return res;
 			}

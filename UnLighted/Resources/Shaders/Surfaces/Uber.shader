@@ -12,8 +12,6 @@
 		_Height("Height", 2D) = "white" {}
 		_Cut("Cut", 2D) = "white" {}
 		_Params("Metallic, Roughness, Bumpiness, Cut", Vector) = (1, 1, 1, 0)
-		[HideInInspector]
-		_Hack("", 2D) = "bump" {}
 	}
 
 	SubShader
@@ -46,7 +44,6 @@
 		sampler2D _Roughness;
 		sampler2D _AO;
 		sampler2D _Height;
-		sampler2D _Hack;
 		sampler2D _Cut;
 
 		ENDCG
@@ -79,10 +76,10 @@
 
 			float4 frag(v2f_light i) : COLOR
 			{
-				float4 params = saturate(_Params);
+				float4 p = saturate(_Params);
 
 			#ifdef CUT_ON
-				clip(tex2D(_Cut, i.uv).r - params.w);
+				clip(tex2D(_Cut, i.uv).r - p.w);
 			#endif
 
 			#ifdef HEIGHT_ON
@@ -92,17 +89,14 @@
 				Surface s;
 
 				s.Albedo = _Color;
-				s.Metallic = params.x;
-				s.Roughness = params.y;
+				s.Metallic = p.x;
+				s.Roughness = p.y;
 
 			#ifdef ALBEDO_ON
 				s.Albedo *= tex2D(_Albedo, i.uv).rgb;
 			#endif
 
-				float4 n0 = tex2D(_Hack, i.uv);
-				float4 n1 = tex2D(_Normal, i.uv);
-
-				s.Normal = UnpackNormal(lerp(n0, n1, params.z));
+				s.Normal = lerp(FWD, UnpackNormal(tex2D(_Normal, i.uv)), p.z);
 
 			#ifdef METALLIC_ON
 				s.Metallic *= tex2D(_Metallic, i.uv).r;
@@ -133,10 +127,10 @@
 
 			float4 frag(v2f_uber i) : COLOR
 			{
-				float4 params = saturate(_Params);
+				float4 p = saturate(_Params);
 
 			#ifdef CUT_ON
-				clip(tex2D(_Cut, i.uv.xy).r - params.w);
+				clip(tex2D(_Cut, i.uv.xy).r - p.w);
 			#endif
 
 			#ifdef HEIGHT_ON
@@ -146,8 +140,8 @@
 				Surface s;
 
 				s.Albedo = _Color;
-				s.Metallic = params.x;
-				s.Roughness = params.y;
+				s.Metallic = p.x;
+				s.Roughness = p.y;
 
 			#ifdef ALBEDO_ON
 				s.Albedo *= tex2D(_Albedo, i.uv.xy).rgb;
@@ -161,10 +155,7 @@
 				}
 
 			#ifdef REFLECTIONS_ON
-				float4 n0 = tex2D(_Hack, i.uv.xy);
-				float4 n1 = tex2D(_Normal, i.uv.xy);
-
-				s.Normal = UnpackNormal(lerp(n0, n1, params.z));
+				s.Normal = lerp(FWD, UnpackNormal(tex2D(_Normal, i.uv.xy)), p.z);
 
 			#ifdef ROUGHNESS_ON
 				s.Roughness *= tex2D(_Roughness, i.uv.xy).r;
@@ -176,7 +167,7 @@
 			#endif
 
 			#ifdef AO_ON
-				s.AO = (tex2D(_AO, i.uv.xy).r * params.z) + (1.0 - params.z);
+				s.AO = (tex2D(_AO, i.uv.xy).r * p.z) + (1.0 - p.z);
 			#else
 				s.AO = 1.0;
 			#endif

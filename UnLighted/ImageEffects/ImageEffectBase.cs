@@ -6,6 +6,7 @@ namespace UnLighted.ImageEffects
 	public abstract class ImageEffectBase : MonoBehaviour
 	{
 		private Material material;
+		private Common common;
 
 		public virtual string Name
 		{
@@ -25,6 +26,21 @@ namespace UnLighted.ImageEffects
 				}
 
 				return this.material;
+			}
+		}
+
+		public Common Common
+		{
+			get
+			{
+				if (this.common == null)
+				{
+					this.common = this.Get<Common>();
+					this.common.hideFlags = HideFlags.HideInInspector;
+					this.common.enabled = false;
+				}
+
+				return this.common;
 			}
 		}
 

@@ -46,7 +46,7 @@ v2f_uber vert_uber(appdata_full v)
 
 	float4 fade = unity_ShadowFadeCenterAndType;
 
-	o.multi.xyz = mul(_Object2World, v.vertex).xyz - fade.xyz;
+	o.multi.xyz = o.worldPos - fade.xyz;
 	o.multi.xyz *= fade.w;
 
 	o.multi.w = -mul(UNITY_MATRIX_MV, v.vertex).z;
@@ -69,6 +69,29 @@ v2f_shadow vert_shadow(appdata_full v)
 	o.vec = mul(_Object2World, v.vertex).xyz - _LightPositionRange.xyz;
 
 	return o;
+}
+
+inline float3 T2W(v2f_light i, float3 n)
+{
+	return float3(dot(i.twX, n), dot(i.twY, n), dot(i.twZ, n));
+}
+
+inline float3 T2W(v2f_uber i, float3 n)
+{
+	return float3(dot(i.twX.xyz, n), dot(i.twY.xyz, n), dot(i.twZ.xyz, n));
+}
+
+inline float3 BPCEM(v2f_uber i, float3 n)
+{
+	float3 r = reflect(float3(i.twX.w, i.twY.w, i.twZ.w), T2W(i, n));
+	float3 s = _BoxPos - (_BoxSize * 0.5);
+
+	float3 a = (s + _BoxSize - i.worldPos) / r;
+	float3 b = (s - i.worldPos) / r;
+
+	float3 p = (r > 0) ? a : b;
+
+	return i.worldPos + (r * min(min(p.x, p.y), p.z)) - _BoxPos;
 }
 
 inline float D(float a, float NdH)
@@ -131,12 +154,15 @@ inline float SampleShadowCube(float3 vec)
 #ifdef SHADOWS_SOFT
 	float4 shadow = 0;
 
+	float idx;
+	float2 z;
+	float4 sample;
+
 	for (int i = 0; i < 4; i++)
 	{
-		float4 sample;
+		idx = i;
 
-		float idx = i;
-		float2 z = float2(1.0, -1.0) * (idx + 1.0) * _Shadows.y;
+		z = (idx + 1.0) * float2(1.0, -1.0) * _Shadows.y;
 
 		if ((i % 2) == 1)
 		{
@@ -161,7 +187,7 @@ inline float4 PrePassBase(v2f_light i, Surface s)
 {
 	float4 res;
 
-	res.rg = EncodeNormal(dot(i.twX, s.Normal), dot(i.twY, s.Normal), dot(i.twZ, s.Normal));
+	res.rg = EncodeNormal(T2W(i, s.Normal));
 	res.b = max(s.Roughness, EPSILON);
 	res.a = lerp(0.03, Luminance(s.Albedo), s.Metallic);
 
@@ -196,8 +222,8 @@ inline float3 PrePassFinal(v2f_uber i, Surface s)
 #endif
 
 	float a = max(s.Roughness, EPSILON);
-	float4 cube = float4(BPCEM(i, s.Normal), a * 8.0);
-	float3 env = HDRDecode(texCUBElod(_Box, cube));
+	float4 rlf = float4(BPCEM(i, s.Normal), a * 8.0);
+	float3 env = HDRDecode(texCUBElod(_Box, rlf));
 	float3 spec = lerp(0.03.xxx, s.Albedo, s.Metallic);
 
 	env *= F3(spec, a, dot(normalize(i.viewDir), s.Normal));

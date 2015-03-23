@@ -40,7 +40,6 @@ namespace UnLighted.ImageEffects
 			if (this.lut == null)
 			{
 				Graphics.Blit(a, b);
-
 				return;
 			}
 

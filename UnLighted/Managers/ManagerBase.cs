@@ -10,19 +10,10 @@ namespace UnLighted.Managers
 		{
 			get
 			{
-				if (ManagerBase<T>.main != null)
+				if (ManagerBase<T>.main == null)
 				{
-					return ManagerBase<T>.main;
+					ManagerBase<T>.main = Util.Find<T>();
 				}
-
-				ManagerBase<T>.main = Object.FindObjectOfType<T>();
-
-				if (ManagerBase<T>.main != null)
-				{
-					return ManagerBase<T>.main;
-				}
-
-				ManagerBase<T>.main = new GameObject { hideFlags = HideFlags.DontSave }.AddComponent<T>();
 
 				return ManagerBase<T>.main;
 			}

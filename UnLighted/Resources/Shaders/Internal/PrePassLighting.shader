@@ -30,7 +30,6 @@
 			#pragma multi_compile_lightpass
 
 			float4 _LightPos;
-			float3 _LightDir;
 			float3 _LightColor;
 			sampler2D _LightTextureB0;
 
@@ -61,8 +60,8 @@
 
 				float depth = Linear01Depth(SAMPLE_DEPTH_TEXTURE_PROJ(_CameraDepthTexture, UNITY_PROJ_COORD(i.uv)));
 
-				float4 viewPos = float4(i.ray * depth, 1.0);
-				float3 worldPos = mul(_CameraToWorld, viewPos).xyz;
+				float3 viewPos = i.ray * depth;
+				float3 worldPos = mul(_CameraToWorld, float4(viewPos, 1.0));
 
 				float fade = distance(worldPos, unity_ShadowFadeCenterAndType.xyz);
 

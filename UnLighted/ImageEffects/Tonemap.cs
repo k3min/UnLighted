@@ -31,17 +31,20 @@ namespace UnLighted.ImageEffects
 			this.Material.SetFloat("_AdaptionRate", this.AdaptionRate);
 			this.Material.SetInt("_Level", this.MipLevel);
 
-			var tmp = RenderTexture.GetTemporary(1, 1, 0, RenderTextureFormat.ARGBHalf);
-
-			Graphics.Blit(this.lum, this.Debug ? b : tmp, this.Material, (this.first || this.Debug) ? 1 : 0);
-
-			if (!this.Debug)
+			if (this.Debug)
 			{
-				this.Material.SetTexture("_Adapted", tmp);
-				this.Material.SetFloat("_Exposure", this.Exposure);
-
-				Graphics.Blit(a, b, this.Material, 2);
+				Graphics.Blit(this.lum, b, this.Material, 1);
+				return;
 			}
+
+			var tmp = RenderTexture.GetTemporary(4, 4, 0, RenderTextureFormat.ARGBHalf);
+
+			Graphics.Blit(this.lum, tmp, this.Material, this.first ? 1 : 0);
+
+			this.Material.SetTexture("_Adapted", tmp);
+			this.Material.SetFloat("_Exposure", this.Exposure);
+
+			Graphics.Blit(a, b, this.Material, 2);
 
 			RenderTexture.ReleaseTemporary(tmp);
 

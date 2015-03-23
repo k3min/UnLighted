@@ -5,6 +5,8 @@ static const float PI = 3.14159265358979323846;
 static const float TWO_PI = PI * 2.0;
 static const float HALF_PI = PI * 0.5;
 static const float EPSILON = 0.001;
+static const float3 FWD = float3(0, 0, 1);
+static const float L = 1.0 / length(float2(0.5));
 
 sampler2D _MainTex;
 float4 _MainTex_TexelSize;

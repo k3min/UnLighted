@@ -59,6 +59,9 @@
     <Compile Include="Hand.cs" />
     <Compile Include="GameState.cs" />
     <Compile Include="ImageEffects\Visualize.cs" />
+    <Compile Include="ImageEffects\Common.cs" />
+    <Compile Include="Util.cs" />
+    <Compile Include="ImageEffects\Flares.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\ImageEffects\Tonemap.shader">
@@ -88,9 +91,6 @@
     <None Include="Resources\Shaders\ImageEffects\BoxProbe.shader">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Resources\Shaders\ImageEffects\Bloom.shader">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="Resources\Shaders\ImageEffects\ColorGrading.shader">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -101,6 +101,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Resources\Shaders\ImageEffects\Visualize.shader">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\Shaders\ImageEffects\Common.shader">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\Shaders\ImageEffects\Flares.shader">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
