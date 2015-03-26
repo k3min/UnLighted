@@ -96,6 +96,13 @@
 				s.Albedo *= tex2D(_Albedo, i.uv).rgb;
 			#endif
 
+				if (i.color.r >  EPSILON &&
+					i.color.g <= EPSILON &&
+					i.color.b <= EPSILON)
+				{
+					s.Albedo *= _Alt;
+				}
+
 				s.Normal = lerp(FWD, UnpackNormal(tex2D(_Normal, i.uv)), p.z);
 
 			#ifdef METALLIC_ON
@@ -172,7 +179,7 @@
 				s.AO = 1.0;
 			#endif
 
-				return float4(PrePassFinal(i, s), 1.0);
+				return PrePassFinal(i, s);
 			}
 
 			ENDCG

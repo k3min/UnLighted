@@ -10,18 +10,20 @@
 
 	SubShader
 	{
+		Tags
+		{
+			"Queue" = "Transparent"
+			"RenderType" = "Transparent"
+			"IgnoreProjector" = "True"
+		}
+
 		GrabPass
 		{
 		}
 
 		Pass
 		{
-			Tags
-			{
-				"Queue" = "Transparent"
-				"RenderType" = "Transparent"
-				"IgnoreProjector" = "True"
-			}
+			ZWrite On
 
 			CGPROGRAM
 
@@ -58,11 +60,7 @@
 				float3 res = tex2Dproj(_GrabTexture, UNITY_PROJ_COORD(i.screen)).rgb * _Color;
 
 			#ifdef REFLECTIONS_ON
-				float a = max(tex2D(_Roughness, i.uv.xy).r * p.y, EPSILON);
-				float4 rfl = float4(BPCEM(i, normal), a * 8.0);
-				float3 env = HDRDecode(texCUBElod(_Box, rfl));
-
-				res += env * F3(0.03, a, dot(normalize(i.viewDir), normal));
+				res += Refl(i, normal, 0.03, tex2D(_Roughness, i.uv.xy).r * p.y);
 			#endif
 
 				return float4(res, 0.0);

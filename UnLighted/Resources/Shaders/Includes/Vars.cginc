@@ -16,7 +16,9 @@ sampler2D _CameraDepthTexture;
 sampler2D _CameraDepthNormalsTexture;
 
 sampler2D _LightBuffer;
-samplerCUBE _ShadowMapTexture;
+float4x4 _LightMatrix0;
+sampler2D _LightTexture0;
+float3 _LightColor0;
 
 float4 unity_LightmapST;
 sampler2D unity_Lightmap;
@@ -30,6 +32,7 @@ float4 _Params;
 samplerCUBE _Box;
 float3 _BoxPos;
 float3 _BoxSize;
+sampler2D _Thickness;
 
 struct Surface {
 	float3 Albedo;
@@ -37,10 +40,12 @@ struct Surface {
 	float Metallic;
 	float Roughness;
 	float AO;
+	float Thickness;
 };
 
 struct v2f_light {
 	float4 pos : POSITION;
+	float4 color : COLOR;
 	float2 uv : TEXCOORD0;
 	float3 twX : TEXCOORD1;
 	float3 twY : TEXCOORD2;
@@ -59,6 +64,7 @@ struct v2f_uber {
 	float3 viewDir : TEXCOORD5;
 	float3 worldPos : TEXCOORD6;
 	float4 multi : TEXCOORD7;
+	float4 lightDir : TEXCOORD8;
 };
 
 struct v2f_shadow {

@@ -62,6 +62,7 @@
     <Compile Include="ImageEffects\Common.cs" />
     <Compile Include="Util.cs" />
     <Compile Include="ImageEffects\Flares.cs" />
+    <Compile Include="ImageEffects\Thickness.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\ImageEffects\Tonemap.shader">
@@ -107,6 +108,15 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Resources\Shaders\ImageEffects\Flares.shader">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\Shaders\ImageEffects\Thickness.shader">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\Shaders\Internal\DepthNormalTexture.shader">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\Shaders\Surfaces\UberTranslucency.shader">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

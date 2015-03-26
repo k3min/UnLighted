@@ -32,6 +32,7 @@
 			float4 _LightPos;
 			float3 _LightColor;
 			sampler2D _LightTextureB0;
+			samplerCUBE _ShadowMapTexture;
 
 			CBUFFER_START(UnityPerCamera2)
 			float4x4 _CameraToWorld;
@@ -42,6 +43,42 @@
 				float4 uv : TEXCOORD0;
 				float3 ray : TEXCOORD1;
 			};
+
+			inline float SampleShadowCube(float3 vec)
+			{
+				float fade = length(vec) * _LightPositionRange.w * (1.0 - _Shadows.z);
+
+			#ifdef SHADOWS_SOFT
+				float4 shadow = 0;
+
+				float idx;
+				float2 z;
+				float4 sample;
+
+				for (int i = 0; i < 4; i++)
+				{
+					idx = i;
+
+					z = (idx + 1.0) * float2(1.0, -1.0) * _Shadows.y;
+
+					if ((i % 2) == 1)
+					{
+						z = -z;
+					}
+
+					sample.x = DecodeFloatRGBA(texCUBE(_ShadowMapTexture, vec + z.xxx));
+					sample.y = DecodeFloatRGBA(texCUBE(_ShadowMapTexture, vec + z.yyx));
+					sample.z = DecodeFloatRGBA(texCUBE(_ShadowMapTexture, vec + z.yxy));
+					sample.w = DecodeFloatRGBA(texCUBE(_ShadowMapTexture, vec + z.xyy));
+
+					shadow += (sample < (fade - (idx * _Shadows.w))) ? _LightShadowData.r : 1.0;
+				}
+
+				return dot(shadow, 1.0 / (4.0 * 4.0));
+			#else
+				return DecodeFloatRGBA(texCUBE(_ShadowMapTexture, vec)) < fade ? _LightShadowData.r : 1.0;
+			#endif
+			}
 
 			v2f vert(appdata_full v)
 			{
@@ -89,7 +126,10 @@
 
 				float3 viewDir = normalize(_WorldSpaceCameraPos - worldPos);
 
-				float4 res = CalculateLight(normal, metallic, a, _LightColor.rgb, lightDir, viewDir);
+				float4 res = CalculateLight(normal, metallic, a, lightDir, viewDir);
+
+				res.rgb *= _LightColor;
+				res.a *= Luminance(_LightColor);
 
 				res *= saturate(atten);
 				res *= saturate(1.0 - fade);

@@ -109,5 +109,20 @@
 
 			ENDCG
 		}
+
+		Pass // 5: Thickness
+		{
+			CGPROGRAM
+
+			#pragma vertex vert_img
+			#pragma fragment frag
+
+			float4 frag(v2f_img i) : COLOR
+			{
+				return tex2D(_Thickness, i.uv);
+			}
+
+			ENDCG
+		}
 	}
 }

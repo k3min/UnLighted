@@ -54,6 +54,8 @@
     <Compile Include="Managers\GameManagerEditor.cs" />
     <Compile Include="GameStateEditor.cs" />
     <Compile Include="Controllers\CameraControllerEditor.cs" />
+    <Compile Include="ImageEffects\ThicknessEditor.cs" />
+    <Compile Include="UberTranslucencyMaterialEditor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Box\Bake.bat">
