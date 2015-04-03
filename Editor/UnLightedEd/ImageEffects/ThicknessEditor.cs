@@ -23,8 +23,8 @@ namespace UnLightedEd.ImageEffects
 		{
 			var camera = (target as Thickness).camera;
 
-			camera.enabled = false;
-			camera.hideFlags = HideFlags.NotEditable | HideFlags.HideInHierarchy;
+			camera.depth = -2;
+			camera.hideFlags = HideFlags.HideInHierarchy;
 		}
 	}
 }

@@ -1,5 +1,4 @@
-UnLighted
-=========
+# UnLighted
 
 ![image](http://i.imgur.com/n7hSTKi.gif)
 
@@ -9,30 +8,33 @@ For now, UnLighted expects:
 - Unity 4.6.1
 - Linear color space
 - Deferred rendering path
+- The ShaderManager component
 
-Features
---------
+## Features
 
 What's already there:
 
-- Per-object motion blur
-- (Hejl) Tonemapping
-- Lens distortion
-- Bloom
-- LUT based color grading
-- Physically based über shader (with glass variant)
-- Box projected cubemaps (with tools to render them)
-- Optimized lighting pass & better soft shadows (at this point, point support only)
-- Rigid player controller with optional head bob
-- Separate camera controller with smooth free look
-- Awesome trigger system
-- Moving platform component
-- Manager class
-- *Hand* component
-- Game manager with scriptable states
+- Image effects
+  - Extenable base component
+  - Per-object motion blur
+  - (Hejl) Tonemapping
+  - Lens distortion
+  - Bloom & Flares
+  - LUT based color grading
+- Shading
+  - Physically based *Über* shader (with glass & transulent variant)
+  - Box projected cubemaps (with tools to render them)
+  - Optimized lighting pass & better soft shadows (at this point, point support only)
+- Other components
+  - Rigid player controller (with optional head bob)
+  - Separate camera controller (with smooth free look)
+  - Awesome trigger system
+  - Moving platform component
+  - Extenable manager component
+  - *Hand* component
+  - Game manager with scriptable states
 
-Demo Time!
-----------
+### Demo Time!
 
 ![image](http://i.imgur.com/yI7ZXVS.png)
 

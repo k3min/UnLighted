@@ -13,7 +13,7 @@ namespace UnLighted.ImageEffects
 		public float Halo = 0.5f;
 		public float Distortion = 1.5f;
 		public int BlurIterations = 2;
-		public Vector2 BlurSize = new Vector2(1, 1);
+		public Vector2 BlurSize = Vector2.one;
 		public int Downsample;
 
 		[HideInInspector]
@@ -26,7 +26,7 @@ namespace UnLighted.ImageEffects
 			var w = a.width >> i;
 			var h = a.height >> i;
 
-			var rt = RenderTexture.GetTemporary(w, h, 0, RenderTextureFormat.ARGBHalf);
+			var rt = RenderTexture.GetTemporary(w, h, 0, RenderTextureFormat.ARGBHalf, RenderTextureReadWrite.Linear);
 
 			this.Common.Threshold(a, rt, this.Threshold);
 			this.Common.Blur(rt, this.BlurIterations, this.BlurSize / (float)(1 << i));
@@ -34,7 +34,7 @@ namespace UnLighted.ImageEffects
 			this.Material.SetTexture("_LensColor", this.LensColor);
 			this.Material.SetVector("_Params", new Vector3(this.Ghost, this.Halo, this.Distortion));
 
-			var rt2 = this.Debug ? b : RenderTexture.GetTemporary(w, h, 0, RenderTextureFormat.ARGBHalf);
+			var rt2 = this.Debug ? b : RenderTexture.GetTemporary(w, h, 0, RenderTextureFormat.ARGBHalf, RenderTextureReadWrite.Linear);
 
 			base.OnRenderImage(rt, rt2);
 

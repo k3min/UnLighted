@@ -17,8 +17,8 @@
 			#include "UnityCG.cginc"
 
 			#include "./../Includes/Vars.cginc"
+			#include "./../Includes/BRDF.cginc"
 			#include "./../Includes/Util.cginc"
-			#include "./../Includes/Uber.cginc"
 
 			#pragma vertex vert
 			#pragma fragment frag
@@ -126,7 +126,7 @@
 
 				float3 viewDir = normalize(_WorldSpaceCameraPos - worldPos);
 
-				float4 res = CalculateLight(normal, metallic, a, lightDir, viewDir);
+				float4 res = BRDF(normal, metallic, a, lightDir, viewDir);
 
 				res.rgb *= _LightColor;
 				res.a *= Luminance(_LightColor);

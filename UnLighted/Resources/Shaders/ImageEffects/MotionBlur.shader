@@ -26,12 +26,12 @@
 			float2 a = cur.xy / cur.w;
 			float2 b = prv.xy / prv.w;
 
-			return a - b;
+			return ((a - b) * 0.5) + 0.5;
 		}
 
 		inline float2 DecodeMotion(float2 motion)
 		{
-			return motion;
+			return (motion * 2.0) - 1.0;
 		}
 
 		ENDCG
@@ -71,9 +71,7 @@
 			float4 frag(v2f_img i) : COLOR
 			{
 				float2 vel = DecodeMotion(tex2D(_MotionTex, i.uv).xy) * _MotionScale;
-
-				float magnitude = round(length(vel * _MainTex_TexelSize.zw));
-				float samples = clamp(magnitude, 1, MAX_SAMPLES);
+				float samples = clamp(round(length(vel * _MainTex_TexelSize.zw)), 1, MAX_SAMPLES);
 
 				float4 res = tex2D(_MainTex, i.uv);
 
@@ -128,10 +126,10 @@
 
 			float4 frag(v2f i) : COLOR
 			{
-				float z = ((i.screen.z / i.screen.w) * 0.5) + 0.5;
-				float d = SAMPLE_DEPTH_TEXTURE_PROJ(_CameraDepthTexture, UNITY_PROJ_COORD(i.screen));
+				float a = Linear01Depth(((i.screen.z / i.screen.w) * 0.5) + 0.5);
+				float b = DecodeFloatRG(tex2Dproj(_CameraDepthNormalsTexture, UNITY_PROJ_COORD(i.screen)).zw);
 
-				if ((z - d) > EPSILON)
+				if ((a - b) > EPSILON)
 				{
 					discard;
 				}

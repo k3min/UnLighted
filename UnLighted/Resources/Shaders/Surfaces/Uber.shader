@@ -3,14 +3,16 @@
 	Properties
 	{
 		_Color("Color", Color) = (1, 1, 1)
-		_Albedo("Albedo", 2D) = "white" {}
-		_Alt("Alternative", Color) = (1, 0.75, 0)
+		_Alt("Alternative", Color) = (1, 1, 1)
+		_Albedo("Albedo", 2D) = "" {}
 		_Normal("Normal", 2D) = "bump" {}
-		_Metallic("Metallic", 2D) = "white" {}
-		_Roughness("Roughness", 2D) = "white" {}
-		_AO("AO", 2D) = "white" {}
-		_Height("Height", 2D) = "white" {}
-		_Cut("Cut", 2D) = "white" {}
+		_Metallic("Metallic", 2D) = "" {}
+		_Roughness("Roughness", 2D) = "" {}
+		_AO("AO", 2D) = "" {}
+		_Height("Height", 2D) = "" {}
+		_Emission("Emission", 2D) = "" {}
+		_EmissionParams("Emission Color (RGB), Power (A)", Color) = (1, 1, 1, 0)
+		_Cut("Cut", 2D) = "" {}
 		_Params("Metallic, Roughness, Bumpiness, Cut", Vector) = (1, 1, 1, 0)
 	}
 
@@ -23,6 +25,7 @@
 		#include "UnityCG.cginc"
 
 		#include "./../Includes/Vars.cginc"
+		#include "./../Includes/BRDF.cginc"
 		#include "./../Includes/Util.cginc"
 		#include "./../Includes/Uber.cginc"
 
@@ -42,7 +45,6 @@
 		sampler2D _Normal;
 		sampler2D _Metallic;
 		sampler2D _Roughness;
-		sampler2D _AO;
 		sampler2D _Height;
 		sampler2D _Cut;
 
@@ -131,6 +133,11 @@
 			#pragma multi_compile_prepassfinal
 			#pragma multi_compile AO_OFF AO_ON
 			#pragma multi_compile REFLECTIONS_OFF REFLECTIONS_ON
+			#pragma multi_compile EMISSION_OFF EMISSION_ON
+
+			sampler2D _AO;
+			sampler2D _Emission;
+			float4 _EmissionParams;
 
 			float4 frag(v2f_uber i) : COLOR
 			{
@@ -149,6 +156,7 @@
 				s.Albedo = _Color;
 				s.Metallic = p.x;
 				s.Roughness = p.y;
+				s.Emission = _EmissionParams.rgb * _EmissionParams.a * 255.0;
 
 			#ifdef ALBEDO_ON
 				s.Albedo *= tex2D(_Albedo, i.uv.xy).rgb;
@@ -177,6 +185,10 @@
 				s.AO = (tex2D(_AO, i.uv.xy).r * p.z) + (1.0 - p.z);
 			#else
 				s.AO = 1.0;
+			#endif
+
+			#ifdef EMISSION_ON
+				s.Emission *= tex2D(_Emission, i.uv).rgb;
 			#endif
 
 				return PrePassFinal(i, s);

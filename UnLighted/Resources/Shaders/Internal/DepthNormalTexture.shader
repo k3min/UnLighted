@@ -26,8 +26,8 @@
 				v2f o;
 
 				o.pos = mul(UNITY_MATRIX_MVP, v.vertex);
-				o.data.xyz = COMPUTE_VIEW_NORMAL;
-				o.data.w = COMPUTE_DEPTH_01;
+				o.data.xyz = mul((float3x3)UNITY_MATRIX_IT_MV, v.normal);
+				o.data.w = -(mul(UNITY_MATRIX_MV, v.vertex).z * _ProjectionParams.w);
 
 				return o;
 			}
@@ -50,6 +50,7 @@
 			CGPROGRAM
 
 			#include "UnityCG.cginc"
+			#include "./../Includes/Vars.cginc"
 
 			#pragma vertex vert
 			#pragma fragment frag
@@ -67,8 +68,8 @@
 				v2f o;
 
 				o.pos = mul(UNITY_MATRIX_MVP, v.vertex);
-				o.data.xyz = COMPUTE_VIEW_NORMAL;
-				o.data.w = COMPUTE_DEPTH_01;
+				o.data.xyz = mul((float3x3)UNITY_MATRIX_IT_MV, v.normal);
+				o.data.w = -(mul(UNITY_MATRIX_MV, v.vertex).z * _ProjectionParams.w);
 
 				return o;
 			}

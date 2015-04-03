@@ -23,13 +23,12 @@
 
 		Pass
 		{
-			ZWrite On
-
 			CGPROGRAM
 
 			#include "UnityCG.cginc"
 
 			#include "./../Includes/Vars.cginc"
+			#include "./../Includes/BRDF.cginc"
 			#include "./../Includes/Util.cginc"
 			#include "./../Includes/Uber.cginc"
 

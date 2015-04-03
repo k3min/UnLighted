@@ -80,7 +80,7 @@
 			ENDCG
 		}
 
-		Pass // 4: Light Color
+		Pass // 4: LightBuffer Color
 		{
 			CGPROGRAM
 
@@ -95,7 +95,7 @@
 			ENDCG
 		}
 
-		Pass // 5: Light Specular
+		Pass // 5: LightBuffer Specular
 		{
 			CGPROGRAM
 
@@ -110,7 +110,7 @@
 			ENDCG
 		}
 
-		Pass // 5: Thickness
+		Pass // 6: Thickness
 		{
 			CGPROGRAM
 
@@ -120,6 +120,36 @@
 			float4 frag(v2f_img i) : COLOR
 			{
 				return tex2D(_Thickness, i.uv);
+			}
+
+			ENDCG
+		}
+
+		Pass // 7: Combined Normal
+		{
+			CGPROGRAM
+
+			#pragma vertex vert_img
+			#pragma fragment frag
+
+			float4 frag(v2f_img i) : COLOR
+			{
+				return float4(DecodeViewNormalStereo(tex2D(_CameraDepthNormalsTexture, i.uv)), 1.0);
+			}
+
+			ENDCG
+		}
+
+		Pass // 8: Combined Depth
+		{
+			CGPROGRAM
+
+			#pragma vertex vert_img
+			#pragma fragment frag
+
+			float4 frag(v2f_img i) : COLOR
+			{
+				return DecodeFloatRG(tex2D(_CameraDepthNormalsTexture, i.uv).zw);
 			}
 
 			ENDCG

@@ -23,9 +23,11 @@ namespace UnLighted.ImageEffects
 			GeomertyRoughness,
 			GeomertySpecular,
 			Depth,
-			LightColor,
-			LightSpecular,
-			Thickness
+			LightBufferColor,
+			LightBufferSpecular,
+			Thickness,
+			CombinedNormal,
+			CombinedDepth
 		}
 	}
 }

@@ -15,7 +15,7 @@ namespace UnLighted.ImageEffects
 
 		public void Blur(RenderTexture rt, int iterations, Vector2 size)
 		{
-			var rt2 = RenderTexture.GetTemporary(rt.width, rt.height, 0, RenderTextureFormat.ARGBHalf);
+			var rt2 = RenderTexture.GetTemporary(rt.width, rt.height, 0, RenderTextureFormat.ARGBHalf, RenderTextureReadWrite.Linear);
 
 			for (var i = 0; i < iterations; i++)
 			{

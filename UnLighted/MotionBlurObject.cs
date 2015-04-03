@@ -13,8 +13,6 @@ namespace UnLighted
 		private bool moved;
 		private Material[] materials;
 
-		public bool Fixed { get { return this.rigidbody != null; } }
-
 		private void Awake()
 		{
 			this.mesh = this.GetComponent<MeshFilter>().mesh;
@@ -42,7 +40,7 @@ namespace UnLighted
 			this.MVP = vp * this.transform.localToWorldMatrix;
 		}
 
-		public void RenderVectors(Material material)
+		public void RenderVector(Material material)
 		{
 			if (!this.renderer.isVisible || !this.moved)
 			{
@@ -57,7 +55,7 @@ namespace UnLighted
 			{
 				var type = this.materials[i].GetTag("RenderType", true);
 
-				if (type == "Opaque" && material.SetPass(2))
+				if ((type == "Opaque" || type == "Translucent") && material.SetPass(2))
 				{
 					Graphics.DrawMeshNow(this.mesh, matrix, i);
 				}

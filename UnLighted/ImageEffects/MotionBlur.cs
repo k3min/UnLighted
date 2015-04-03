@@ -10,7 +10,7 @@ namespace UnLighted.ImageEffects
 		private Matrix4x4 invVP;
 		private Matrix4x4 VP;
 
-		public float TargetFPS = 60;
+		public int TargetFPS = 60;
 		public int Downsample = 1;
 
 		[HideInInspector]
@@ -26,7 +26,7 @@ namespace UnLighted.ImageEffects
 			var w = Screen.width >> ImageEffectBase.Level(this.Downsample);
 			var h = Screen.height >> ImageEffectBase.Level(this.Downsample);
 
-			this.motion = new RenderTexture(w, h, 0, RenderTextureFormat.RGHalf);
+			this.motion = new RenderTexture(w, h, 0, RenderTextureFormat.RGHalf, RenderTextureReadWrite.Linear);
 
 			foreach (var mr in Object.FindObjectsOfType<MeshRenderer>())
 			{
@@ -39,7 +39,7 @@ namespace UnLighted.ImageEffects
 			}
 		}
 
-		private void OnPreRender()
+		private void UpdateTransform()
 		{
 			var view = this.camera.worldToCameraMatrix;
 			var proj = GL.GetGPUProjectionMatrix(this.camera.projectionMatrix, false);
@@ -51,7 +51,7 @@ namespace UnLighted.ImageEffects
 			this.objects.ForEach(o => o.UpdateTransform(this.VP));
 		}
 
-		private void OnPostRender()
+		private void RenderVector()
 		{
 			this.Material.SetMatrix("_Proj", this.prvVP * this.invVP);
 
@@ -59,15 +59,18 @@ namespace UnLighted.ImageEffects
 
 			var rt = RenderTexture.active;
 
-			Graphics.SetRenderTarget(this.motion);
+			RenderTexture.active = this.motion;
 
-			this.objects.ForEach(o => o.RenderVectors(this.Material));
+			this.objects.ForEach(o => o.RenderVector(this.Material));
 
-			Graphics.SetRenderTarget(rt);
+			RenderTexture.active = rt;
 		}
 
 		public override void OnRenderImage(RenderTexture a, RenderTexture b)
 		{
+			this.UpdateTransform();
+			this.RenderVector();
+
 			if (this.Debug)
 			{
 				Graphics.Blit(this.motion, b);

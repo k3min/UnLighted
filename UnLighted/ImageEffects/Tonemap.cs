@@ -17,7 +17,9 @@ namespace UnLighted.ImageEffects
 
 		private void Awake()
 		{
-			this.lum = new RenderTexture(1 << this.MipLevel, 1 << this.MipLevel, 0, RenderTextureFormat.ARGBHalf)
+			var x = 1 << this.MipLevel;
+
+			this.lum = new RenderTexture(x, x, 0, RenderTextureFormat.RHalf, RenderTextureReadWrite.Linear)
 			{
 				useMipMap = true
 			};
@@ -37,7 +39,7 @@ namespace UnLighted.ImageEffects
 				return;
 			}
 
-			var tmp = RenderTexture.GetTemporary(4, 4, 0, RenderTextureFormat.ARGBHalf);
+			var tmp = RenderTexture.GetTemporary(4, 4, 0, RenderTextureFormat.RHalf, RenderTextureReadWrite.Linear);
 
 			Graphics.Blit(this.lum, tmp, this.Material, this.first ? 1 : 0);
 

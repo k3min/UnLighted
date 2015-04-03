@@ -87,6 +87,7 @@ inline float3 T2W(v2f_uber i, float3 n)
 	return float3(dot(i.twX.xyz, n), dot(i.twY.xyz, n), dot(i.twZ.xyz, n));
 }
 
+// http://gamedev.net/topic/568829-box-projected-cubemap-environment-mapping/?view=findpost&p=4637262
 inline float3 BPCEM(v2f_uber i, float3 n)
 {
 	float3 r = reflect(float3(i.twX.w, i.twY.w, i.twZ.w), T2W(i, n));
@@ -110,54 +111,6 @@ inline float3 Refl(v2f_uber i, float3 normal, float3 spec, float a)
 	float3 env = HDRDecode(texCUBElod(_Box, rlf));
 
 	return env * (spec + ((max(spec, 1.0 - a) - spec) * pow(1.0 - VdN, _Fresnel)));
-}
-
-inline float D(float a, float NdH)
-{
-	float a2 = a * a;
-	float NdH2 = NdH * NdH;
-
-	float denominator = (NdH2 * (a2 - 1.0)) + 1.0;
-
-	denominator *= denominator;
-	denominator *= PI;
-
-	return a2 / denominator;
-}
-
-inline float G(float a, float NdV, float NdL)
-{
-	float k = a * 0.5;
-	float GV = NdV / ((NdV * (1.0 - k)) + k);
-	float GL = NdL / ((NdL * (1.0 - k)) + k);
-
-	return GV * GL;
-}
-
-inline float F(float spec, float a, float VdH)
-{
-	return spec + ((1.0 - spec) * pow(1.0 - saturate(VdH), _Fresnel));
-}
-
-inline float Specular(float spec, float a, float NdL, float NdV, float NdH, float VdH)
-{
-	return (D(a, NdH) * G(a, NdV, NdL) * F(spec, a, VdH)) / max(4.0 * NdL * NdV, EPSILON);
-}
-
-inline float4 CalculateLight(float3 normal, float spec, float a, float3 lightDir, float3 viewDir)
-{
-	float3 h = normalize(viewDir + lightDir);
-	float NdL = saturate(dot(normal, lightDir));
-	float NdV = abs(dot(normal, viewDir));
-	float NdH = saturate(dot(normal, h));
-	float VdH = saturate(dot(viewDir, h));
-
-	float4 res;
-
-	res.rgb = NdL;
-	res.a = Specular(spec, a, NdL, NdV, NdH, VdH);
-
-	return res;
 }
 
 inline float4 PrePassBase(v2f_light i, Surface s)
@@ -215,25 +168,30 @@ inline float4 PrePassFinal(v2f_uber i, Surface s)
 	res *= light.rgb;
 	res += light.a;
 
+	res += s.Emission;
+
 	return float4(res, 1.0);
 }
 
 // http://slideshare.net/slideshow/embed_code/7170855
-inline float3 CalculateTrans(v2f_uber i, inout Surface s, float dist, float power)
+inline float4 Translusency(v2f_uber i, Surface s)
 {
 	float a = max(s.Roughness, EPSILON);
 
+#ifdef REFLECTIONS_ON
 	s.Albedo += Refl(i, s.Normal, 0.03, a);
+#endif
 
 	float3 lightDir = normalize(i.lightDir.xyz);
-	float3 lightDirInv= -(lightDir + (s.Normal * dist));
 	float3 viewDir = normalize(i.viewDir);
 
-	float4 light = CalculateLight(s.Normal, 0.03, a, lightDir, viewDir);
+	float4 light = BRDF(s.Normal, 0.03, a, lightDir, viewDir);
+	float back = pow(saturate(dot(viewDir, -lightDir)), 1.0 / s.Translucency);
+
 	float scale = (1.0 / _LightPositionRange.w) * 0.5;
 	float thickness = tex2Dproj(_Thickness, UNITY_PROJ_COORD(i.screen));
 
-	light.rgb += pow(saturate(dot(viewDir, lightDirInv)), power) * scale * pow(thickness, s.Thickness);
+	light.rgb += back * scale * pow(thickness, s.Thickness);
 	light.rgb *= _LightColor0;
 	light.a *= Luminance(_LightColor0);
 	light *= tex2D(_LightTexture0, i.lightDir.ww).UNITY_ATTEN_CHANNEL * 2.0;
@@ -243,7 +201,11 @@ inline float3 CalculateTrans(v2f_uber i, inout Surface s, float dist, float powe
 	res *= light.rgb;
 	res += light.a;
 
-	return res;
+#ifdef LIGHTMAP_OFF
+	res += s.Albedo * i.multi.rgb;
+#endif
+
+	return float4(res, 1.0);
 }
 
 #endif

@@ -55,4 +55,9 @@ inline float3 DecodeNormal(float2 enc)
 	return float3(den * q, zsign * (den - 1.0));
 }
 
+inline float3 ReconstructViewPos(float2 uv, float z)
+{
+	return float3((((uv * _MainTex_TexelSize.zw) * _ProjInfo.xy) + _ProjInfo.zw) * z, z);
+}
+
 #endif

@@ -31,7 +31,8 @@ namespace UnLighted.ImageEffects
 			this.camera.nearClipPlane = 0.1f;
 			this.camera.farClipPlane = 100;
 			this.camera.hdr = true;
-			this.camera.clearFlags = CameraClearFlags.Depth;
+			this.camera.clearFlags = CameraClearFlags.SolidColor;
+			this.camera.backgroundColor = Color.black;
 			this.camera.cullingMask = 1;
 
 			this.tex = new Texture2D(BoxProbe.size, BoxProbe.size, TextureFormat.ARGB32, false, true);
@@ -63,7 +64,7 @@ namespace UnLighted.ImageEffects
 				return;
 			}
 
-			var rt = RenderTexture.GetTemporary(BoxProbe.size, BoxProbe.size, 0, RenderTextureFormat.ARGB32);
+			var rt = RenderTexture.GetTemporary(BoxProbe.size, BoxProbe.size, 0, RenderTextureFormat.ARGB32, RenderTextureReadWrite.Linear);
 
 			base.OnRenderImage(a, rt);
 

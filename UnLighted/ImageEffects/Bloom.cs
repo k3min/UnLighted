@@ -21,7 +21,7 @@ namespace UnLighted.ImageEffects
 			var w = a.width >> i;
 			var h = a.height >> i;
 
-			var rt = RenderTexture.GetTemporary(w, h, 0, RenderTextureFormat.ARGBHalf);
+			var rt = RenderTexture.GetTemporary(w, h, 0, RenderTextureFormat.ARGBHalf, RenderTextureReadWrite.Linear);
 
 			this.Common.Threshold(a, rt, this.Threshold);
 			this.Common.Blur(rt, this.BlurIterations, this.BlurSize / (float)(1 << i));

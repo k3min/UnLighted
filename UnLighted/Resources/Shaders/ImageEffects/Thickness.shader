@@ -24,7 +24,7 @@
 
 			float4 frag(v2f_img i) : COLOR
 			{
-				float d1 = DecodeFloatRGBA(tex2D(_MainTex, i.uv));
+				float d1 = tex2D(_MainTex, i.uv);
 				float d2 = DecodeFloatRG(tex2D(_CameraDepthNormalsTexture, i.uv).zw);
 
 				return 1.0 - saturate((d1 - d2) * _ProjectionParams.z);
@@ -70,7 +70,7 @@
 
 			float4 frag(v2f i) : COLOR
 			{
-				return EncodeFloatRGBA(min(i.depth, 1.0 - EPSILON));
+				return i.depth;
 			}
 
 			ENDCG
