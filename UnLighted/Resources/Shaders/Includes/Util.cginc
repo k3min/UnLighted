@@ -60,4 +60,18 @@ inline float3 ReconstructViewPos(float2 uv, float z)
 	return float3((((uv * _MainTex_TexelSize.zw) * _ProjInfo.xy) + _ProjInfo.zw) * z, z);
 }
 
+inline float4 Random(float2 uv)
+{
+	float noise = sin(dot(uv + _Time.y, float2(12.9898, 78.233))) * 43758.5453;
+
+	float4 res;
+
+	res.x = frac(noise * 0.573);
+	res.y = frac(noise * 1.085);
+	res.z = frac(noise * 1.226);
+	res.w = frac(noise * 0.782);
+
+	return (res * 2.0) - 1.0;
+}
+
 #endif

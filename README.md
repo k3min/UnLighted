@@ -21,6 +21,7 @@ What's already there:
   - Lens distortion
   - Bloom & Flares
   - LUT based color grading
+  - Grain
 - Shading
   - Physically based *Über* shader (with glass & transulent variant)
   - Box projected cubemaps (with tools to render them)

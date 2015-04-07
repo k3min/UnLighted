@@ -12,6 +12,7 @@
 		CGINCLUDE
 
 		#include "UnityCG.cginc"
+
 		#include "./../Includes/Vars.cginc"
 		#include "./../Includes/Util.cginc"
 
@@ -20,7 +21,7 @@
 
 		ENDCG
 
-		Pass // 0: Geomery Normals
+		Pass // 0: Geomery normals
 		{
 			CGPROGRAM
 
@@ -35,7 +36,7 @@
 			ENDCG
 		}
 
-		Pass // 1: Geomery Roughness
+		Pass // 1: Geomery roughness
 		{
 			CGPROGRAM
 
@@ -50,7 +51,7 @@
 			ENDCG
 		}
 
-		Pass // 2: Geomery Specular
+		Pass // 2: Geomery specular
 		{
 			CGPROGRAM
 
@@ -80,7 +81,7 @@
 			ENDCG
 		}
 
-		Pass // 4: LightBuffer Color
+		Pass // 4: LightBuffer color
 		{
 			CGPROGRAM
 
@@ -95,7 +96,7 @@
 			ENDCG
 		}
 
-		Pass // 5: LightBuffer Specular
+		Pass // 5: LightBuffer specular
 		{
 			CGPROGRAM
 
@@ -119,13 +120,13 @@
 
 			float4 frag(v2f_img i) : COLOR
 			{
-				return tex2D(_Thickness, i.uv);
+				return tex2D(_Thickness, i.uv).x;
 			}
 
 			ENDCG
 		}
 
-		Pass // 7: Combined Normal
+		Pass // 7: Combined view space normals
 		{
 			CGPROGRAM
 
@@ -140,7 +141,7 @@
 			ENDCG
 		}
 
-		Pass // 8: Combined Depth
+		Pass // 8: Combined depth
 		{
 			CGPROGRAM
 

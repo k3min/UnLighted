@@ -25,11 +25,11 @@ namespace UnLighted.ImageEffects
 
 			this.camera.clearFlags = CameraClearFlags.Color;
 			this.camera.backgroundColor = new Color(0, 0, 0, 0);
-			this.camera.depthTextureMode |= DepthTextureMode.DepthNormals;
-			this.camera.cullingMask = -1;
-			this.camera.hdr = true;
+			this.camera.cullingMask = 2;
 			this.camera.renderingPath = RenderingPath.Forward;
 			this.camera.targetTexture = this.thickness;
+			this.camera.hdr = true;
+			this.camera.depthTextureMode = DepthTextureMode.DepthNormals;
 
 			this.camera.SetReplacementShader(this.Material.shader, "RenderType");
 		}

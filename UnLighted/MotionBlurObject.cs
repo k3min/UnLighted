@@ -21,6 +21,11 @@ namespace UnLighted
 
 		public void UpdateTransform(Matrix4x4 vp)
 		{
+			if (!this.renderer.isVisible)
+			{
+				return;
+			}
+
 			var pos = Vector3.Distance(this.prvPos, this.transform.position) > float.Epsilon;
 			var rot = Quaternion.Angle(this.prvRot, this.transform.rotation) > float.Epsilon;
 

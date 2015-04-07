@@ -89,11 +89,10 @@
 
 			float4 frag(v2f_img i) : COLOR
 			{
-				float vignette = 1.0 - (length(0.5 - i.uv) * L);
 				float adapted = tex2D(_Adapted, 0.5.xx).r;
 				float exposure = _Exposure * Autokey(adapted) / adapted;
 
-				return Hejl(tex2D(_MainTex, i.uv) * exposure * pow(vignette, 0.4));
+				return Hejl(tex2D(_MainTex, i.uv) * exposure);
 			}
 
 			ENDCG

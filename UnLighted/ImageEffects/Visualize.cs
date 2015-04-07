@@ -26,7 +26,7 @@ namespace UnLighted.ImageEffects
 			LightBufferColor,
 			LightBufferSpecular,
 			Thickness,
-			CombinedNormal,
+			CombinedViewSpaceNormals,
 			CombinedDepth
 		}
 	}

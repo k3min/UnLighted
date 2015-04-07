@@ -63,6 +63,7 @@
     <Compile Include="Util.cs" />
     <Compile Include="ImageEffects\Flares.cs" />
     <Compile Include="ImageEffects\Thickness.cs" />
+    <Compile Include="ImageEffects\Grain.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Shaders\ImageEffects\Tonemap.shader">
@@ -120,6 +121,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Resources\Shaders\Surfaces\UberTranslucent.shader">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\Shaders\ImageEffects\Grain.shader">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

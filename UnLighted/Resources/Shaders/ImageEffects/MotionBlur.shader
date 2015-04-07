@@ -65,12 +65,12 @@
 
 			#pragma glsl
 
-			sampler2D _MotionTex;
+			sampler2D _Motion;
 			float _MotionScale;
 
 			float4 frag(v2f_img i) : COLOR
 			{
-				float2 vel = DecodeMotion(tex2D(_MotionTex, i.uv).xy) * _MotionScale;
+				float2 vel = DecodeMotion(tex2D(_Motion, i.uv).xy) * _MotionScale;
 				float samples = clamp(round(length(vel * _MainTex_TexelSize.zw)), 1, MAX_SAMPLES);
 
 				float4 res = tex2D(_MainTex, i.uv);

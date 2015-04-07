@@ -16,17 +16,13 @@ namespace UnLighted.ImageEffects
 		[HideInInspector]
 		public bool Debug;
 
-		private RenderTexture motion;
-		private List<MotionBlurObject> objects = new List<MotionBlurObject>();
+		private MotionBlurObject[] objects;
 
 		private void Awake()
 		{
+			var o = new List<MotionBlurObject>();
+
 			this.camera.depthTextureMode |= DepthTextureMode.Depth;
-
-			var w = Screen.width >> ImageEffectBase.Level(this.Downsample);
-			var h = Screen.height >> ImageEffectBase.Level(this.Downsample);
-
-			this.motion = new RenderTexture(w, h, 0, RenderTextureFormat.RGHalf, RenderTextureReadWrite.Linear);
 
 			foreach (var mr in Object.FindObjectsOfType<MeshRenderer>())
 			{
@@ -35,8 +31,10 @@ namespace UnLighted.ImageEffects
 					continue;
 				}
 
-				this.objects.Add(mr.gameObject.AddComponent<MotionBlurObject>());
+				o.Add(mr.gameObject.AddComponent<MotionBlurObject>());
 			}
+
+			this.objects = o.ToArray();
 		}
 
 		private void UpdateTransform()
@@ -48,39 +46,48 @@ namespace UnLighted.ImageEffects
 			this.VP = proj * view;
 			this.invVP = this.VP.inverse;
 
-			this.objects.ForEach(o => o.UpdateTransform(this.VP));
+			foreach (var o in this.objects)
+			{
+				o.UpdateTransform(this.VP);
+			}
 		}
 
-		private void RenderVector()
+		private void RenderVector(RenderTexture rt)
 		{
 			this.Material.SetMatrix("_Proj", this.prvVP * this.invVP);
 
-			Graphics.Blit(null, this.motion, this.Material, 0);
+			Graphics.Blit(null, rt, this.Material, 0);
 
-			var rt = RenderTexture.active;
-
-			RenderTexture.active = this.motion;
-
-			this.objects.ForEach(o => o.RenderVector(this.Material));
-
-			RenderTexture.active = rt;
+			foreach (var o in this.objects)
+			{
+				o.RenderVector(this.Material);
+			}
 		}
 
 		public override void OnRenderImage(RenderTexture a, RenderTexture b)
 		{
 			this.UpdateTransform();
-			this.RenderVector();
+
+			var w = Screen.width >> ImageEffectBase.Level(this.Downsample);
+			var h = Screen.height >> ImageEffectBase.Level(this.Downsample);
+
+			var rt = RenderTexture.GetTemporary(w, h, 0, RenderTextureFormat.RGHalf, RenderTextureReadWrite.Linear);
+
+			this.RenderVector(rt);
 
 			if (this.Debug)
 			{
-				Graphics.Blit(this.motion, b);
-				return;
+				Graphics.Blit(rt, b);
+			}
+			else
+			{
+				this.Material.SetTexture("_Motion", rt);
+				this.Material.SetFloat("_MotionScale", (1f / this.TargetFPS) / Time.deltaTime);
+
+				Graphics.Blit(a, b, this.Material, 1);
 			}
 
-			this.Material.SetTexture("_MotionTex", this.motion);
-			this.Material.SetFloat("_MotionScale", (1f / this.TargetFPS) / Time.deltaTime);
-
-			Graphics.Blit(a, b, this.Material, 1);
+			RenderTexture.ReleaseTemporary(rt);
 		}
 	}
 }

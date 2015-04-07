@@ -16,6 +16,8 @@ namespace UnLightedEd.ImageEffects
 		{
 			this.DefaultInspector();
 
+			EditorGUILayout.HelpBox("Only renderers in the \"TransparentFX\" layer will be rendered", MessageType.Info);
+
 			this.target.Hint<Thickness>(x => x.camera.tag != "MainCamera", "This shouldn't be on the main camera!");
 		}
 

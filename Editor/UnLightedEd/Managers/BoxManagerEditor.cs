@@ -30,12 +30,14 @@ namespace UnLightedEd.Managers
 
 		private void OnSceneGUI()
 		{
-			if (this.boxes != null)
+			if (this.boxes == null)
 			{
-				foreach (var box in this.boxes)
-				{
-					Handles.Label(box.Pos, BoxManagerEditor.Content(box), Util.AlignedLabel(TextAnchor.MiddleCenter));
-				}
+				return;
+			}
+
+			foreach (var box in this.boxes)
+			{
+				Handles.Label(box.Pos, BoxManagerEditor.Content(box), Util.AlignedLabel(TextAnchor.MiddleCenter));
 			}
 		}
 
